@@ -15,6 +15,7 @@ export default function DragWindowRegion({ title }: DragWindowRegionProps) {
       <div className="draglayer w-full">
         {title && (
           <div className="flex flex-1 p-2 text-xs whitespace-nowrap text-gray-400 select-none">
+            <div />
             {title}
           </div>
         )}

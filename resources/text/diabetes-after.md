@@ -1,0 +1,1 @@
+Het Score Model (Kahn) voorspelt hoe groot de kans is dat volwassenen tussen 45 en 64 jaar diabetes type 2 krijgen. Het kijkt naar dingen zoals leeftijd, geslacht, gewicht (BMI), familiegeschiedenis, hoge bloeddruk en bloedwaarden zoals suiker en cholesterol. Aan elke factor wordt een score gegeven, die samen het risico bepalen.

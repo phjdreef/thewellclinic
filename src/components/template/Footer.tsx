@@ -1,10 +1,10 @@
-import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="font-tomorrow text-muted-foreground inline-flex justify-between text-[0.7rem] uppercase">
-      <p>Made by LuanRoger - Based in Brazil 🇧🇷</p>
-      <p>Powered by Electron</p>
+      <p>{t("wellClinic")}</p>
     </footer>
   );
 }

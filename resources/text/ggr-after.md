@@ -1,0 +1,3 @@
+Het gewichtsgerelateerd gezondheidsrisico geeft weer hoe groot het risico is op gezondheidsproblemen als gevolg van overgewicht of obesitas. Hiervoor worden de BMI, buikomtrek en comorbiditeiten mee genomen, omdat ze het risico op complicaties aanzienlijk verhogen.
+
+De comorbiditeiten zijn: diabetes type 2, hypertensie (hoge bloeddruk), dyslipidemie (verhoogd cholesterol of andere vetstoornissen in het bloed), hart- en vaatziekten (zoals hartinfarct, angina pectoris, of beroerte), slaapapneu, artrose (vooral van knieën, heupen of onderrug door overbelasting), niet-alcoholische leververvetting (NAFLD), polycysteus-ovariumsyndroom, refluxziekte, depressie of andere psychische aandoeningen (die kunnen samenhangen met overgewicht).

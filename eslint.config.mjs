@@ -18,6 +18,7 @@ export default [
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: {
+      "react/react-in-jsx-scope": "off",
       "react-compiler": reactCompiler,
     },
     rules: {

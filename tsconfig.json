@@ -22,5 +22,12 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "./package.json", "./forge.config.ts", "*.mts", "vite.renderer.config.mts"]
+  "include": [
+    "src/**/*.json",
+    "src/**/*",
+    "./package.json",
+    "./forge.config.ts",
+    "*.mts",
+    "vite.renderer.config.mts"
+  ]
 }

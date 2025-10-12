@@ -7,8 +7,8 @@ export default [
     prefix: "EN-US",
   },
   {
-    key: "pt-BR",
-    nativeName: "Português (Brasil)",
-    prefix: "PT-BR",
+    key: "nl-NL",
+    nativeName: "Nederlands",
+    prefix: "NL-NL",
   },
 ] satisfies Language[];

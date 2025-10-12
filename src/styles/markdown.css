@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+.markdown h1 {
+  @apply mt-8 text-2xl;
+}
+
+.markdown h2 {
+  @apply mt-6 text-xl;
+}
+
+.markdown h3 {
+  @apply mt-4 text-lg;
+}
+
+.markdown p {
+  @apply mt-2 text-base;
+}
+
+.markdown ul {
+  @apply list-disc pl-5;
+}
+
+.markdown ol {
+  @apply list-decimal pl-5;
+}
+
+.markdown blockquote {
+  @apply border-l-4 pl-4 italic;
+}
+
+.markdown img {
+  @apply h-auto max-w-full;
+}
+
+.markdown a {
+  @apply text-blue-500 underline;
+}
+
+.markdown code {
+  @apply rounded bg-gray-100 p-1;
+}
+
+.markdown pre {
+  @apply overflow-x-auto rounded bg-gray-100 p-4;
+}
+
+.markdown table {
+  @apply w-full border-collapse;
+}
+
+.markdown img {
+  @apply h-auto max-w-full;
+}
+
+.markdown th {
+  @apply bg-gray-200 p-2 text-left;
+}

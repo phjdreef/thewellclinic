@@ -6,17 +6,29 @@ import { Label } from "@/components/ui/label";
 import { useStore } from "@/hooks/useStore";
 import { JSX, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { BMIChartComponent } from "./BMIChart";
+import { BMIChartComponent } from "../../charts/BMIChart";
+import { calcGgrCategory } from "./calculateGGR";
 
-export function BmiInput(): JSX.Element {
-  const { weight, setWeight } = useStore();
-  const { height, setHeight } = useStore();
-  const { bmi, setBmi } = useStore();
-  const { bmiCategory, setBmiCategory } = useStore();
+export function MeasureInput(): JSX.Element {
+  const {
+    weight,
+    setWeight,
+    height,
+    setHeight,
+    waist,
+    setWaist,
+    bmi,
+    setBmi,
+    bmiCategory,
+    setBmiCategory,
+    ggr,
+    setGgr,
+    gender,
+  } = useStore();
 
   const { t } = useTranslation();
 
-  const calculateBmi = () => {
+  const calculateMeasures = () => {
     if (weight && weight > 0 && height && height > 0) {
       const heightInMeters = height / 100;
       const bmiValue = weight / (heightInMeters * heightInMeters);
@@ -30,6 +42,16 @@ export function BmiInput(): JSX.Element {
       else if (bmiValue >= 30 && bmiValue < 35) setBmiCategory("obeseClass1");
       else if (bmiValue >= 35 && bmiValue < 40) setBmiCategory("obeseClass2");
       else setBmiCategory("obeseClass3");
+      if (waist && gender && bmiValue > 0 && waist > 0) {
+        const ggrCategory = calcGgrCategory({
+          bmi: bmiValue,
+          bmiCategory: bmiCategory!,
+          gender: gender,
+          waist: waist,
+          hasComorbidity: false,
+        });
+        setGgr(ggrCategory.GgrCategory);
+      }
     } else {
       setBmi(null);
       setBmiCategory(null);
@@ -37,7 +59,7 @@ export function BmiInput(): JSX.Element {
   };
 
   useEffect(() => {
-    calculateBmi();
+    calculateMeasures();
   }, [weight, height]);
 
   return (
@@ -51,7 +73,7 @@ export function BmiInput(): JSX.Element {
           <Input
             id="weight"
             type="number"
-            placeholder={t("enterWight")}
+            placeholder={t("enterWeight")}
             value={weight || ""}
             onChange={(e) => setWeight(Number(e.target.value))}
           />
@@ -64,6 +86,16 @@ export function BmiInput(): JSX.Element {
             placeholder={t("enterHeight")}
             value={height || ""}
             onChange={(e) => setHeight(Number(e.target.value))}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="waist">{t("waist")}</Label>
+          <Input
+            id="waist"
+            type="number"
+            placeholder={t("enterWaist")}
+            value={waist || ""}
+            onChange={(e) => setWaist(Number(e.target.value))}
           />
         </div>
         {bmi && bmi > 0 && (
@@ -83,4 +115,4 @@ export function BmiInput(): JSX.Element {
   );
 }
 
-export default BmiInput;
+export default MeasureInput;

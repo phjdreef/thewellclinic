@@ -7,13 +7,12 @@ import "@/styles/markdown.css"; // Ensure you have styles for markdown
 import { JSX, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useReactToPrint } from "react-to-print";
-import { BMIChartComponent } from "../cards/bmi/BMIChart";
-import { WaistChartComponent } from "../cards/waistHip/WaistHipChart";
-import { WaistChartRatioComponent } from "../cards/waistHip/WaistHipRatioChart";
+import { BMIChartComponent } from "../charts/BMIChart";
+import { WaistChartComponent } from "../charts/WaistChart";
 import TextAreaResult from "../template/TextArea";
-import { GgrChartComponent } from "../cards/ggr/GGRChart";
-import { AscvdChartComponent } from "../cards/ascvd/AscvdChart";
-import { DiabetesChartComponent } from "../cards/diabetes/DiabetesChart";
+import { GgrChartComponent } from "../charts/GGRChart";
+import { AscvdChartComponent } from "../charts/AscvdChart";
+import { DiabetesChartComponent } from "../charts/DiabetesChart";
 
 export function OverallResult(): JSX.Element {
   const {
@@ -25,8 +24,6 @@ export function OverallResult(): JSX.Element {
     diabetes,
     gender,
     waist,
-    hip,
-    waistHip,
     ggr,
     height,
     weight,
@@ -114,18 +111,6 @@ export function OverallResult(): JSX.Element {
             <p className="font-bold">
               {t("yourWaist")}: {waist}
             </p>
-            {hip && waistHip && waistHip > 0 && (
-              <>
-                <WaistChartRatioComponent
-                  waist={waist}
-                  hip={hip}
-                  gender={gender}
-                />
-                <p className="font-bold">
-                  {t("yourWaistHip")}: {Math.round(waistHip * 100) / 100}
-                </p>
-              </>
-            )}
             <TextAreaResult content={texts.waist_result_header} />
             <Markdowntext component="waist" beforeAfter="after" />
           </div>

@@ -4,7 +4,6 @@
   "version": "1.0.1",
   "description": "A comprehensive 360° health analysis application for cardiovascular risk, diabetes assessment, BMI analysis, and weight-related health insights.",
   "main": ".vite/build/main.js",
-  "type": "module",
   "private": true,
   "scripts": {
     "start": "electron-forge start",

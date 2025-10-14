@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "The Well clinic app for Health ",
   "main": ".vite/build/main.js",
+  "type": "module",
   "private": true,
   "scripts": {
     "start": "electron-forge start",

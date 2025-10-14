@@ -13,7 +13,7 @@ type Props = {
     | "waist_result_header"
     | "hip_result_header"
     | "ggr_result_header"
-    | "ascvd_result_header"
+    | "score2_result_header"
     | "diabetes_result_header";
 };
 

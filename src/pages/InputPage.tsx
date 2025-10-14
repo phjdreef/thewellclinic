@@ -53,14 +53,14 @@ export default function Input() {
               <TextInput element="bmi_result_header" />
               <TextInput element="waist_result_header" />
               <TextInput element="ggr_result_header" />
-              <TextInput element="ascvd_result_header" />
+              <TextInput element="score2_result_header" />
               <TextInput element="diabetes_result_header" />
             </div>
           </TabsContent>
         </Tabs>
         {/* 
         <div className="space-y-4">
-          <AscvdInput />
+          <score2Input />
           <DiabetesInput />
         </div> */}
       </div>

@@ -43,8 +43,8 @@ function DiabetesInput(): JSX.Element {
     waist,
     age,
     gender,
-    diabetes,
-    setDiabetes,
+    diabetesPoints,
+    setDiabetesPoints,
     diabetesRisc,
     setDiabetesRisc,
     diabetesForm,
@@ -188,7 +188,7 @@ function DiabetesInput(): JSX.Element {
       DiabetesConfig.riskBands.find((b) => total >= b.min && total < b.max) ??
       DiabetesConfig.riskBands[DiabetesConfig.riskBands.length - 1];
     const risk = band.risk;
-    setDiabetes(total);
+    setDiabetesPoints(total);
     setDiabetesRisc(risk);
     return { total, detail };
   }, [form]);
@@ -249,13 +249,15 @@ function DiabetesInput(): JSX.Element {
               <div
                 className="h-full bg-slate-800"
                 style={{ width: `${percentOfMax}%` }}
-                aria-label={`Score bar ${diabetes} of ${DiabetesConfig.maxTotal}`}
+                aria-label={`Score bar ${diabetesPoints} of ${DiabetesConfig.maxTotal}`}
               />
             </div>
             <div className="mt-2 text-sm text-slate-600">
               {t("totalPoints")}:{" "}
-              <span className="font-semibold text-slate-900">{diabetes}</span> /{" "}
-              {DiabetesConfig.maxTotal}
+              <span className="font-semibold text-slate-900">
+                {diabetesPoints}
+              </span>{" "}
+              / {DiabetesConfig.maxTotal}
             </div>
             {diabetesRisc && (
               <div className="mt-2 text-sm text-slate-600">

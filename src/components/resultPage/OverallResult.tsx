@@ -11,7 +11,7 @@ import { BMIChartComponent } from "../charts/BMIChart";
 import { WaistChartComponent } from "../charts/WaistChart";
 import TextAreaResult from "../template/TextArea";
 import { GgrChartComponent } from "../charts/GGRChart";
-import { AscvdChartComponent } from "../charts/AscvdChart";
+import { Score2ChartComponent } from "../charts/Score2Chart";
 import { DiabetesChartComponent } from "../charts/DiabetesChart";
 
 export function OverallResult(): JSX.Element {
@@ -20,8 +20,8 @@ export function OverallResult(): JSX.Element {
     bmiCategory,
     name,
     age,
-    ascvd,
-    diabetes,
+    score2,
+    diabetesPoints: diabetes,
     gender,
     waist,
     ggr,
@@ -31,7 +31,7 @@ export function OverallResult(): JSX.Element {
   } = useStore();
   const { t } = useTranslation();
 
-  const contentRef = useRef<HTMLDivElement>(undefined);
+  const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({
     pageStyle: `@media print {
       @page {
@@ -85,7 +85,7 @@ export function OverallResult(): JSX.Element {
           <div className="mt-10 space-y-4">
             <p className="font-bold">{t("bmi_result_header")}</p>
             <Markdowntext component="bmi" beforeAfter="before" />
-            <BMIChartComponent bmi={bmi} />
+            <BMIChartComponent />
             <span className="font-bold">
               {t("yourBMI")}: {bmi}
             </span>
@@ -107,7 +107,7 @@ export function OverallResult(): JSX.Element {
           <div className="mt-10 space-y-4">
             <p className="font-bold">{t("waist_result_header")}</p>
             <Markdowntext component="waist" beforeAfter="before" />
-            <WaistChartComponent waist={waist} />
+            <WaistChartComponent />
             <p className="font-bold">
               {t("yourWaist")}: {waist}
             </p>
@@ -121,7 +121,7 @@ export function OverallResult(): JSX.Element {
             <div className="mt-10 space-y-4">
               <p className="font-bold">{t("ggr_result_header")}</p>
               <Markdowntext component="ggr" beforeAfter="before" />
-              <GgrChartComponent ggr={ggr} />
+              <GgrChartComponent />
               <p className="font-bold">
                 {t("yourGGR")}: {t(ggr)}
               </p>
@@ -130,18 +130,15 @@ export function OverallResult(): JSX.Element {
             </div>
           </>
         )}
-        {/* ASCVD */}
-        {!!ascvd && (
+        {/* score2 */}
+        {!!score2 && (
           <>
             <div className="mt-10 space-y-4">
-              <p className="font-bold">{t("ascvd_result_header")}</p>
-              <Markdowntext component="ascvd" beforeAfter="before" />
-              <AscvdChartComponent ascvd={ascvd} />
-              <p className="font-bold">
-                {t("yourAscvd")}: {Math.round(ascvd * 100) / 100}%
-              </p>
-              <TextAreaResult content={texts.ascvd_result_header} />
-              <Markdowntext component="ascvd" beforeAfter="after" />
+              <p className="font-bold">{t("score2_result_header")}</p>
+              <Markdowntext component="score2" beforeAfter="before" />
+              <Score2ChartComponent />
+              <TextAreaResult content={texts.score2_result_header} />
+              <Markdowntext component="score2" beforeAfter="after" />
             </div>
           </>
         )}
@@ -151,10 +148,7 @@ export function OverallResult(): JSX.Element {
             <div className="mt-10 space-y-4">
               <p className="font-bold">{t("diabetes_result_header")}</p>
               <Markdowntext component="diabetes" beforeAfter="before" />
-              <DiabetesChartComponent diabetes={diabetes} />
-              <p className="font-bold">
-                {t("yourDiabetes")}: {Math.round(diabetes * 100) / 100}%
-              </p>
+              <DiabetesChartComponent />
               <TextAreaResult content={texts.diabetes_result_header} />
               <Markdowntext component="diabetes" beforeAfter="after" />
             </div>

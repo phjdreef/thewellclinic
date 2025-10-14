@@ -7,7 +7,7 @@ export function Markdowntext({
   component,
   beforeAfter,
 }: {
-  component: "ascvd" | "bmi" | "waist" | "ggr" | "diabetes" | "overall";
+  component: "score2" | "bmi" | "waist" | "ggr" | "diabetes" | "overall";
   beforeAfter: "before" | "after";
 }): JSX.Element {
   const [markdownContent, setMarkdownContent] = useState<string>();

@@ -55,13 +55,13 @@ i18n.use(initReactI18next).init({
         lightIncreased: "Lightly increased",
         moderateIncreased: "Moderately increased",
         highIncreased: "Highly increased",
-        extremeInscreased: "Extremely increased",
+        extremeIncreased: "Extremely increased",
 
-        ascvd: "Cardiovascular Diseases",
+        score2: "Cardiovascular Diseases",
         diabetes: "Diabetes",
 
-        yourAscvd: "Your risk of cardiovascular diseases",
-        ascvdRisc: "Risk",
+        yourscore2: "Your risk of cardiovascular diseases",
+        score2Risc: "Risk",
         lowRisc: "Low risk",
         mediumRisc: "Medium risk",
         highRisc: "High risk",
@@ -90,6 +90,10 @@ i18n.use(initReactI18next).init({
         enterSystolic: "Enter systolic pressure (mmHg)",
         enterDiastolic: "Enter diastolic pressure (mmHg)",
 
+        // Cholesterol labels
+        nonHdlCholesterol: "Non-HDL Cholesterol (mmol/L)",
+        enterNonHdl: "Enter Non-HDL Cholesterol (mmol/L)",
+
         //Smoking labels
         smoking: "Smoking",
 
@@ -103,7 +107,7 @@ i18n.use(initReactI18next).init({
         bmi_result_header: "1.1 Body Mass Index (BMI)",
         waist_result_header: "1.2 Waist Circumference",
         ggr_result_header: "1.3 Weight-Related Health Risk (GGR)",
-        ascvd_result_header: "1.4 Risk of Cardiovascular Diseases",
+        score2_result_header: "1.4 Risk of Cardiovascular Diseases",
         diabetes_result_header: "1.5 Risk of Diabetes",
 
         tabBasic: "Basic",
@@ -111,6 +115,12 @@ i18n.use(initReactI18next).init({
         tabBiologicAge: "Biological Age",
         tabDiabetes: "Diabetes",
         tabAdditionalTexts: "Additional Texts",
+
+        score2ChartTitle: "Cardiovascular Risk Assessment",
+        waistChartTitle: "Your Waist Circumference",
+        bmiChartTitle: "Your Body Mass Index (BMI)",
+        ggrChartTitle: "Your Weight-Related Health Risk (GGR)",
+        diabetesChartTitle: "Your Risk of Diabetes",
       },
     },
     "nl-NL": {
@@ -124,6 +134,7 @@ i18n.use(initReactI18next).init({
         date: "Datum",
         wellClinic: "The Well Clinic",
         BMI: "BMI",
+        ggr: "GGR",
         GGR: "Gewichtsgerelateerd Gezondheidsrisico",
         year: "jaar",
         yourGGR: "Uw Gewichtsgerelateerd Gezondheidsrisico",
@@ -148,7 +159,7 @@ i18n.use(initReactI18next).init({
 
         male: "Man",
         female: "Vrouw",
-        ascvd: "Hart- en Vaatziekten",
+        score2: "Hart- en Vaatziekten",
         diabetes: "Suikerziekte",
         comorbidity: "Comorbiditeit",
 
@@ -157,8 +168,8 @@ i18n.use(initReactI18next).init({
         highIncreased: "Sterk verhoogd",
         extremeIncreased: "Extreem verhoogd",
 
-        yourAscvd: "Uw risico op hart- en vaatziekten",
-        ascvdRisc: "Risco",
+        yourscore2: "Uw risico op hart- en vaatziekten",
+        score2Risc: "Risco",
         lowRisc: "Laag risico",
         mediumRisc: "Gemiddeld risico",
         highRisc: "Hoog risico",
@@ -187,6 +198,10 @@ i18n.use(initReactI18next).init({
         enterSystolic: "systolische druk in (mmHg)",
         enterDiastolic: "diastolische druk in (mmHg)",
 
+        // Cholesterol labels
+        nonHdlCholesterol: "Non-HDL Cholesterol (mmol/L)",
+        enterNonHdl: "Non-HDL Cholesterol (mmol/L)",
+
         //Smoking labels
         smoking: "Roken",
 
@@ -200,7 +215,7 @@ i18n.use(initReactI18next).init({
         bmi_result_header: "1.1 Body Mass Index (BMI)",
         waist_result_header: "1.2 Buikomtrek",
         ggr_result_header: "1.3 Gewichtsgerelateerd Gezondheidsrisico (GGR)",
-        ascvd_result_header: "1.4 Risico op Hart- en Vaatziekten",
+        score2_result_header: "1.4 Risico op Hart- en Vaatziekten",
         diabetes_result_header: "1.5 Risico op Suikerziekte",
 
         underWeight: "Ondergewicht",
@@ -215,6 +230,12 @@ i18n.use(initReactI18next).init({
         tabBiologicAge: "Biologische leeftijd",
         tabDiabetes: "Diabetes",
         tabAdditionalTexts: "Extra teksten",
+
+        score2ChartTitle: "Uw risico op hart-en vaatziekten",
+        waistChartTitle: "Uw buikomtrek",
+        bmiChartTitle: "Uw Body Mass Index (BMI)",
+        ggrChartTitle: "Uw gewichtsgerelateerd gezondheidsrisico (GGR)",
+        diabetesChartTitle: "Uw risico op suikerziekte",
       },
     },
   },

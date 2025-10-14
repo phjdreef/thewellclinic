@@ -10,6 +10,8 @@ import { calcBmi, determineBmiCategory } from "@/components/measures/calcBmi";
 import { GgrChartComponent } from "@/components/charts/GGRChart";
 import { BMIChartComponent } from "@/components/charts/BMIChart";
 import { WaistChartComponent } from "@/components/charts/WaistChart";
+import { Score2ChartComponent } from "@/components/charts/Score2Chart";
+import { calcScore2Unified } from "@/components/measures/calcScore2";
 
 export function MeasureInput(): JSX.Element {
   const {
@@ -28,11 +30,33 @@ export function MeasureInput(): JSX.Element {
     comorbidity,
     systolic,
     setSystolic,
+    nonHdl,
+    setNonHdl,
+    age,
+    smoking,
+    score2,
+    setScore2,
   } = useStore();
 
   const { t } = useTranslation();
 
   const calculateMeasures = () => {
+    const sbp = systolic && systolic > 0 ? systolic : undefined;
+    console.log("Hiero", gender, age, sbp, nonHdl, smoking);
+    if (gender && age && sbp && nonHdl && nonHdl > 0) {
+      const score2 = calcScore2Unified({
+        age: age,
+        sbp: sbp,
+        nonHdl: nonHdl,
+        smoker: smoking,
+        sex: gender,
+        region: "low",
+      });
+      if (!score2) return;
+      setScore2(score2);
+      console.log("🚀 ~ calculateMeasures ~ score2:", score2);
+      // setScore2(score2);
+    }
     if (weight && weight > 0 && height && height > 0) {
       const bmiValue = calcBmi(weight, height);
       setBmi(bmiValue);
@@ -51,6 +75,8 @@ export function MeasureInput(): JSX.Element {
         });
         setGgr(ggrCategory.GgrCategory);
       }
+
+      // calculate Score2 risk
     } else {
       setBmi(undefined);
       setBmiCategory(undefined);
@@ -60,7 +86,17 @@ export function MeasureInput(): JSX.Element {
 
   useEffect(() => {
     calculateMeasures();
-  }, [weight, height, comorbidity, waist, gender]);
+  }, [
+    weight,
+    height,
+    comorbidity,
+    waist,
+    gender,
+    nonHdl,
+    systolic,
+    age,
+    smoking,
+  ]);
 
   return (
     <Card>
@@ -97,21 +133,18 @@ export function MeasureInput(): JSX.Element {
           onChange={(e) => setSystolic(e)}
           label={t("systolicBloodPressure")}
         />
-        {bmi && bmi > 0 && (
-          <div className="pt-1 pb-4">
-            <p className="text-lg font-semibold">
-              {t("yourBMI")}: {bmi}
-            </p>
-            {bmiCategory && (
-              <p className="text-muted-foreground text-sm">
-                {t("category")}: {t(bmiCategory)}
-              </p>
-            )}
-          </div>
-        )}
+        <FieldNumberLabel
+          id="nonHdl"
+          placeholder={t("enterNonHdl")}
+          value={nonHdl || undefined}
+          onChange={(e) => setNonHdl(e)}
+          label={t("nonHdlCholesterol")}
+        />
+
         <WaistChartComponent />
         <BMIChartComponent />
         <GgrChartComponent />
+        <Score2ChartComponent />
       </CardContent>
     </Card>
   );

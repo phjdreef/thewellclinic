@@ -1,5 +1,6 @@
 import { BmiCategory } from "@/components/measures/calcBmi";
 import { GgrCategory } from "@/components/measures/calcGGR";
+import { Score2Result } from "@/components/measures/calcScore2";
 import { create } from "zustand";
 
 export type Gender = "male" | "female";
@@ -36,6 +37,8 @@ type Store = {
   setHeight: (newHeight: number | undefined) => void;
   systolic: number | undefined;
   setSystolic: (newSystolic: number | undefined) => void;
+  nonHdl: number | undefined;
+  setNonHdl: (newNonHdl: number | undefined) => void;
   comorbidity: boolean;
   setComorbidity: (newComorbidity: boolean) => void;
   smoking: boolean;
@@ -46,10 +49,10 @@ type Store = {
   setBmiCategory: (newBmiCategory: BmiCategory | undefined) => void;
   ggr: GgrCategory | undefined;
   setGgr: (newGGR: GgrCategory | undefined) => void;
-  ascvd: number | undefined;
-  setAscvd: (newAscvd: number | undefined) => void;
-  diabetes: number | undefined;
-  setDiabetes: (newDiabetes: number | undefined) => void;
+  score2: Score2Result | undefined;
+  setScore2: (newScore2: Score2Result | undefined) => void;
+  diabetesPoints: number | undefined;
+  setDiabetesPoints: (newDiabetes: number | undefined) => void;
   diabetesRisc: number | undefined;
   setDiabetesRisc: (newDiabetesRisc: number | undefined) => void;
   diabetesForm: DiabetesFormState | undefined;
@@ -60,7 +63,7 @@ type Store = {
     waist_result_header: string | undefined;
     hip_result_header: string | undefined;
     ggr_result_header: string | undefined;
-    ascvd_result_header: string | undefined;
+    score2_result_header: string | undefined;
     diabetes_result_header: string | undefined;
   };
   setTexts: (newTexts: { i: string; content: string | undefined }) => void;
@@ -79,6 +82,8 @@ export const useStore = create<Store>()((set) => ({
   setWaist: (newWaist: number | undefined) => set({ waist: newWaist }),
   height: undefined,
   setHeight: (newHeight: number | undefined) => set({ height: newHeight }),
+  nonHdl: undefined,
+  setNonHdl: (newNonHdl: number | undefined) => set({ nonHdl: newNonHdl }),
   systolic: undefined,
   setSystolic: (newSystolic: number | undefined) =>
     set({ systolic: newSystolic }),
@@ -94,11 +99,12 @@ export const useStore = create<Store>()((set) => ({
     set({ bmiCategory: newBmiCategory }),
   ggr: undefined,
   setGgr: (newGGR: GgrCategory | undefined) => set({ ggr: newGGR }),
-  ascvd: undefined,
-  setAscvd: (newAscvd: number | undefined) => set({ ascvd: newAscvd }),
-  diabetes: undefined,
-  setDiabetes: (newDiabetes: number | undefined) =>
-    set({ diabetes: newDiabetes }),
+  score2: undefined,
+  setScore2: (newScore2: Score2Result | undefined) =>
+    set({ score2: newScore2 }),
+  diabetesPoints: undefined,
+  setDiabetesPoints: (newDiabetes: number | undefined) =>
+    set({ diabetesPoints: newDiabetes }),
   diabetesRisc: undefined,
   setDiabetesRisc: (newDiabetesRisc: number | undefined) =>
     set({ diabetesRisc: newDiabetesRisc }),
@@ -111,7 +117,7 @@ export const useStore = create<Store>()((set) => ({
     waist_result_header: undefined,
     hip_result_header: undefined,
     ggr_result_header: undefined,
-    ascvd_result_header: undefined,
+    score2_result_header: undefined,
     diabetes_result_header: undefined,
   },
   setTexts: (newTexts: { i: string; content: string | undefined }) =>

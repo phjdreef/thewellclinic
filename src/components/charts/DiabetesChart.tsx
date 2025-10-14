@@ -13,12 +13,13 @@ import {
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useTranslation } from "react-i18next";
 import { useStore } from "@/hooks/useStore";
+import { round } from "@/helpers/number_helpers";
 
 export const DiabetesChartComponent = () => {
   const { t } = useTranslation();
-  const { diabetesRisc, diabetes } = useStore();
+  const { diabetesRisc } = useStore();
 
-  if (!diabetesRisc || !diabetes) {
+  if (!diabetesRisc) {
     return null;
   }
 
@@ -67,19 +68,19 @@ export const DiabetesChartComponent = () => {
 
     if (riskPercent < 3.5) {
       // Low risk: 0% to 3.5% maps to position 0.5-1.5 (center of first bar)
-      return -0.9 + (riskPercent / 3.5) * 1;
+      return (riskPercent / 3.5) * 1;
     } else if (riskPercent < 6.4) {
       // Medium risk: 3.5% to 6.4% maps to position 1.5-2.5 (center of second bar)
-      return 0.9 + ((riskPercent - 3.5) / (6.4 - 3.5)) * 1;
+      return 1 + ((riskPercent - 3.5) / (6.4 - 3.5)) * 1;
     } else if (riskPercent < 11.4) {
       // High risk: 6.4% to 11.4% maps to position 2.5-3.5 (center of third bar)
-      return 1.9 + ((riskPercent - 6.4) / (11.4 - 6.4)) * 1;
+      return 2 + ((riskPercent - 6.4) / (11.4 - 6.4)) * 1;
     } else if (riskPercent < 19.2) {
       // Extreme risk: 11.4% to 19.2% maps to position 3.5-4.5 (center of fourth bar)
-      return 2.9 + ((riskPercent - 11.4) / (19.2 - 11.4)) * 1;
+      return 3 + ((riskPercent - 11.4) / (19.2 - 11.4)) * 1;
     } else {
       // Very high risk: 19.2%+ maps to position 4.5-5.5 (center of fifth bar)
-      return 3.9 + ((riskPercent - 19.2) / (46.0 - 19.2)) * 1;
+      return 4 + ((riskPercent - 19.2) / (46.0 - 19.2)) * 1;
     }
   };
 
@@ -99,54 +100,65 @@ export const DiabetesChartComponent = () => {
   const chartConfig = {} satisfies ChartConfig;
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="aspect-auto h-[80px] w-full"
-    >
-      <BarChart
-        layout="vertical"
-        data={data}
-        margin={{ top: 5, right: 30, bottom: 5, left: 5 }}
-        height={80}
+    <div className="w-full">
+      <h3 className="mb-4 text-lg font-semibold">{t("diabetesChartTitle")}</h3>
+      <ChartContainer
+        config={chartConfig}
+        className="aspect-auto h-[80px] w-full"
       >
-        <XAxis
-          type="number"
-          interval={0}
-          ticks={[0, 1, 2, 3, 4, 5]}
-          domain={[0, 5]}
-          tickFormatter={formatXAxisTick}
-        />
-        <YAxis dataKey="name" type="category" />
-        <Legend />
+        <BarChart
+          layout="vertical"
+          data={data}
+          margin={{ top: 5, right: 30, bottom: 5, left: 5 }}
+          height={80}
+        >
+          <XAxis
+            type="number"
+            interval={0}
+            ticks={[0, 1, 2, 3, 4, 5]}
+            domain={[0, 5]}
+            tickFormatter={formatXAxisTick}
+          />
+          <YAxis dataKey="name" type="category" />
+          <Legend />
 
-        <Bar dataKey="lowRisc" stackId="a" fill="#849190" name={t("lowRisc")} />
-        <Bar
-          dataKey="mediumRisc"
-          stackId="a"
-          fill="#EBE3DA"
-          name={t("mediumRisc")}
-        />
-        <Bar
-          dataKey="highRisc"
-          stackId="a"
-          fill="#A03F45"
-          name={t("highRisc")}
-        />
-        <Bar
-          dataKey="extremeRisc"
-          stackId="a"
-          fill="#4C2024"
-          name={t("extremeRisc")}
-        />
+          <Bar
+            dataKey="lowRisc"
+            stackId="a"
+            fill="#849190"
+            name={t("lowRisc")}
+          />
+          <Bar
+            dataKey="mediumRisc"
+            stackId="a"
+            fill="#EBE3DA"
+            name={t("mediumRisc")}
+          />
+          <Bar
+            dataKey="highRisc"
+            stackId="a"
+            fill="#A03F45"
+            name={t("highRisc")}
+          />
+          <Bar
+            dataKey="extremeRisc"
+            stackId="a"
+            fill="#4C2024"
+            name={t("extremeRisc")}
+          />
 
-        <Bar
-          dataKey="highextremeRisc"
-          stackId="a"
-          fill="#281415"
-          name={t("highextremeRisc")}
-        />
-        <ReferenceLine x={chartPosition} strokeWidth={8} stroke="#106da6" />
-      </BarChart>
-    </ChartContainer>
+          <Bar
+            dataKey="highextremeRisc"
+            stackId="a"
+            fill="#281415"
+            name={t("highextremeRisc")}
+          />
+          <ReferenceLine x={chartPosition} strokeWidth={8} stroke="#106da6" />
+        </BarChart>
+      </ChartContainer>
+      <p className="font-bold">
+        {t("yourDiabetes")}: {round(diabetesRisc * 100, 1)} %
+      </p>
+    </div>
   );
 };

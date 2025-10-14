@@ -44,45 +44,52 @@ export const GgrChartComponent = () => {
   const chartConfig = {} satisfies ChartConfig;
 
   return (
-    <ChartContainer config={chartConfig} className="h-[80px] w-full">
-      <BarChart layout="vertical" data={data} margin={{ right: 10 }}>
-        <CartesianGrid stroke="#f5f5f5" />
-        <XAxis type="number" domain={[0, 4]} ticks={[0]} />
-        <YAxis dataKey="name" type="category" />
-        <Legend />
+    <div className="w-full">
+      <h3 className="mb-4 text-lg font-semibold">{t("ggrChartTitle")}</h3>
+      <ChartContainer config={chartConfig} className="h-[80px] w-full">
+        <BarChart
+          layout="vertical"
+          data={data}
+          margin={{ top: 5, right: 30, bottom: 5, left: 5 }}
+        >
+          <CartesianGrid stroke="#f5f5f5" />
+          <XAxis type="number" domain={[0, 4]} ticks={[0]} />
+          <YAxis dataKey="name" type="category" />
+          <Legend />
 
-        <Bar
-          dataKey="lightIncreased"
-          stackId="a"
-          fill="#849190"
-          name={t("lightIncreased")}
-        />
-        <Bar
-          dataKey="moderateIncreased"
-          stackId="a"
-          fill="#EBE3DA"
-          name={t("moderateIncreased")}
-        />
-        <Bar
-          dataKey="highIncreased"
-          stackId="a"
-          fill="#A03F45"
-          name={t("highIncreased")}
-        />
-        <Bar
-          dataKey="extremeIncreased"
-          stackId="a"
-          fill="#4C2024"
-          name={t("extremeIncreased")}
-        />
-        {ggr && (
-          <ReferenceLine
-            x={ggrValueMap[ggr]}
-            strokeWidth={8}
-            stroke="#106da6"
+          <Bar
+            dataKey="lightIncreased"
+            stackId="a"
+            fill="#849190"
+            name={t("lightIncreased")}
           />
-        )}
-      </BarChart>
-    </ChartContainer>
+          <Bar
+            dataKey="moderateIncreased"
+            stackId="a"
+            fill="#EBE3DA"
+            name={t("moderateIncreased")}
+          />
+          <Bar
+            dataKey="highIncreased"
+            stackId="a"
+            fill="#A03F45"
+            name={t("highIncreased")}
+          />
+          <Bar
+            dataKey="extremeIncreased"
+            stackId="a"
+            fill="#4C2024"
+            name={t("extremeIncreased")}
+          />
+          {ggr && (
+            <ReferenceLine
+              x={ggrValueMap[ggr]}
+              strokeWidth={8}
+              stroke="#106da6"
+            />
+          )}
+        </BarChart>
+      </ChartContainer>
+    </div>
   );
 };

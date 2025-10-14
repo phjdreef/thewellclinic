@@ -1,205 +1,159 @@
 // =============================================================================
-// SCORE2 + SCORE2-OP 10-year cardiovascular risk calculator (ESC 2021)
-// Supports all regions: low / moderate / high / very-high
-// Automatically selects SCORE2 (<70y) or SCORE2-OP (≥70y)
+// SCORE2 Calculation Functions (ESC 2021)
+// Contains calculation logic for SCORE2 cardiovascular risk assessment
 // =============================================================================
 
-export type Sex = "male" | "female";
+import {
+  SCORE2_TABLE_LOW_RISK,
+  SCORE2_COLOR_MATRIX,
+  AgeGroup,
+  SmokingStatus,
+  RiskColor,
+  Gender,
+} from "./score2Tables";
+
 export type Region = "low" | "moderate" | "high" | "very-high";
 
 export interface Score2Input {
-  sex: Sex;
+  sex: Gender;
   region: Region;
   age: number; // 40–89 years
   sbp: number; // systolic BP (mmHg)
   nonHdl: number; // mmol/L
-  hdl: number; // mmol/L
   smoker: boolean;
+}
+
+interface Risk10yr {
+  step: number;
+  value: number;
+  description: string;
 }
 
 export interface Score2Result {
   model: "SCORE2" | "SCORE2-OP";
-  risk10yr: number; // fraction (e.g. 0.075)
-  percent: number; // percent (e.g. 7.5)
+  risk10yr: Risk10yr; // e.g. "<2.5%", "2.5% - 7.5%", "≥7.5%"
+  color: "green" | "yellow" | "red"; // risk category color
+  tableValue: number; // original number from the SCORE2 table
 }
 
-/* -------------------------------------------------------------------------- */
-/*                             SCORE2 (age 40–69)                             */
-/* -------------------------------------------------------------------------- */
+// Helper function to map age to age group
+function getAgeGroup(age: number): AgeGroup | null {
+  if (age >= 40 && age <= 44) return "40-44";
+  if (age >= 45 && age <= 49) return "45-49";
+  if (age >= 50 && age <= 54) return "50-54";
+  if (age >= 55 && age <= 59) return "55-59";
+  if (age >= 60 && age <= 64) return "60-64";
+  if (age >= 65 && age <= 69) return "65-69";
+  return null; // Age not in supported range
+}
 
-const SCORE2_COEFFS = {
-  male: {
-    lnAge: 3.112,
-    lnSBP: 1.123,
-    lnNonHDL: 0.9,
-    lnHDL: -0.537,
-    smoker: 0.653,
-  },
-  female: {
-    lnAge: 2.721,
-    lnSBP: 1.02,
-    lnNonHDL: 0.59,
-    lnHDL: -0.718,
-    smoker: 0.618,
-  },
-};
+// Helper function to map systolic BP to index
+function getSbpIndex(sbp: number): number | null {
+  if (sbp >= 100 && sbp <= 119) return 0;
+  if (sbp >= 120 && sbp <= 139) return 1;
+  if (sbp >= 140 && sbp <= 159) return 2;
+  if (sbp >= 160) return 3; // Use highest category for very high BP
+  return null; // SBP out of range
+}
 
-const SCORE2_BASELINES = {
-  male: {
-    low: { S0: 0.97763, meanL: 12.618 },
-    moderate: { S0: 0.97412, meanL: 12.618 },
-    high: { S0: 0.97048, meanL: 12.618 },
-    "very-high": { S0: 0.96532, meanL: 12.618 },
-  },
-  female: {
-    low: { S0: 0.98847, meanL: 12.109 },
-    moderate: { S0: 0.98605, meanL: 12.109 },
-    high: { S0: 0.98328, meanL: 12.109 },
-    "very-high": { S0: 0.97917, meanL: 12.109 },
-  },
-};
+// Helper function to map non-HDL cholesterol to index
+function getNonHdlIndex(nonHdl: number): number | null {
+  if (nonHdl >= 2.0 && nonHdl < 4.0) return 0;
+  if (nonHdl >= 4.0 && nonHdl < 6.0) return 1;
+  if (nonHdl >= 6.0 && nonHdl < 8.0) return 2;
+  if (nonHdl >= 8.0) return 3; // Use highest category for very high non-HDL
+  return null; // Non-HDL out of range (< 2.0)
+}
 
-/* -------------------------------------------------------------------------- */
-/*                           SCORE2-OP (age 70–89)                            */
-/* -------------------------------------------------------------------------- */
-
-const SCORE2_OP_COEFFS = {
-  male: {
-    lnAge: 1.739,
-    lnSBP: 1.598,
-    lnNonHDL: 0.948,
-    lnHDL: -0.543,
-    smoker: 0.502,
-  },
-  female: {
-    lnAge: 2.019,
-    lnSBP: 1.49,
-    lnNonHDL: 0.755,
-    lnHDL: -0.657,
-    smoker: 0.469,
-  },
-};
-
-const SCORE2_OP_BASELINES = {
-  male: {
-    low: { S0: 0.9061, meanL: 14.776 },
-    moderate: { S0: 0.8785, meanL: 14.776 },
-    high: { S0: 0.8501, meanL: 14.776 },
-    "very-high": { S0: 0.8078, meanL: 14.776 },
-  },
-  female: {
-    low: { S0: 0.9366, meanL: 14.01 },
-    moderate: { S0: 0.9154, meanL: 14.01 },
-    high: { S0: 0.892, meanL: 14.01 },
-    "very-high": { S0: 0.858, meanL: 14.01 },
-  },
-};
-
-/* -------------------------------------------------------------------------- */
-/*                               Core functions                               */
-/* -------------------------------------------------------------------------- */
-
-function score2Model(
-  sex: Sex,
-  region: Region,
+// Get risk color category from the color matrix
+export function getRiskColorCategory(
+  sex: Gender,
   age: number,
   sbp: number,
   nonHdl: number,
-  hdl: number,
   smoker: boolean,
-): Score2Result {
-  const c = SCORE2_COEFFS[sex];
-  const b = SCORE2_BASELINES[sex][region];
+): RiskColor | null {
+  const ageGroup = getAgeGroup(age);
+  const sbpIndex = getSbpIndex(sbp);
+  const nonHdlIndex = getNonHdlIndex(nonHdl);
 
-  const L =
-    c.lnAge * Math.log(age) +
-    c.lnSBP * Math.log(sbp) +
-    c.lnNonHDL * Math.log(nonHdl) +
-    c.lnHDL * Math.log(hdl) +
-    c.smoker * (smoker ? 1 : 0);
+  // Check if any of the values are out of range
+  if (ageGroup === null || sbpIndex === null || nonHdlIndex === null) {
+    return null; // Invalid input values
+  }
 
-  const risk = 1 - Math.pow(b.S0, Math.exp(L - b.meanL));
-  return { model: "SCORE2", risk10yr: risk, percent: risk * 100 };
+  const smokingStatus: SmokingStatus = smoker ? "smoking" : "nonsmoking";
+  const colorTable = SCORE2_COLOR_MATRIX[sex][smokingStatus][ageGroup];
+  return colorTable[sbpIndex][nonHdlIndex];
 }
 
-function score2OpModel(
-  sex: Sex,
-  region: Region,
+// Convert risk color to age-appropriate risk description
+export function getRiskPercentFromColor(
+  color: RiskColor,
   age: number,
-  sbp: number,
-  nonHdl: number,
-  hdl: number,
-  smoker: boolean,
-): Score2Result {
-  const c = SCORE2_OP_COEFFS[sex];
-  const b = SCORE2_OP_BASELINES[sex][region];
-
-  const L =
-    c.lnAge * Math.log(age) +
-    c.lnSBP * Math.log(sbp) +
-    c.lnNonHDL * Math.log(nonHdl) +
-    c.lnHDL * Math.log(hdl) +
-    c.smoker * (smoker ? 1 : 0);
-
-  const risk = 1 - Math.pow(b.S0, Math.exp(L - b.meanL));
-  return { model: "SCORE2-OP", risk10yr: risk, percent: risk * 100 };
+): Risk10yr {
+  if (age < 50) {
+    // For patients < 50 years
+    switch (color) {
+      case "green":
+        return { step: 1, value: 2.5, description: "<2.5%" };
+      case "yellow":
+        return { step: 2, value: 5, description: "2.5% - 7.5%" };
+      case "red":
+        return { step: 3, value: 7.5, description: "≥7.5%" };
+    }
+  } else {
+    // For patients 50-69 years
+    switch (color) {
+      case "green":
+        return { step: 1, value: 5, description: "<5%" };
+      case "yellow":
+        return { step: 2, value: 7.5, description: "5% - 10%" };
+      case "red":
+        return { step: 3, value: 10, description: "≥10%" };
+    }
+  }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                            Public master function                           */
-/* -------------------------------------------------------------------------- */
+// Main SCORE2 calculation function
+export function calcScore2Unified(input: Score2Input): Score2Result | null {
+  const { sex, age, sbp, nonHdl, smoker } = input;
 
-export function calcScore2Unified(input: Score2Input): Score2Result {
-  const { age } = input;
-  if (age < 40 || age > 89)
-    throw new Error("Valid age range for SCORE2/SCORE2-OP: 40–89 years.");
+  // Check if age is in supported range
+  if (age < 40 || age > 69) {
+    return null; // Age not supported
+  }
 
-  if (age < 70)
-    return score2Model(
-      input.sex,
-      input.region,
-      input.age,
-      input.sbp,
-      input.nonHdl,
-      input.hdl,
-      input.smoker,
-    );
-  else
-    return score2OpModel(
-      input.sex,
-      input.region,
-      input.age,
-      input.sbp,
-      input.nonHdl,
-      input.hdl,
-      input.smoker,
-    );
+  const ageGroup = getAgeGroup(age);
+  const sbpIndex = getSbpIndex(sbp);
+  const nonHdlIndex = getNonHdlIndex(nonHdl);
+
+  // Check if any of the values are out of range
+  if (ageGroup === null || sbpIndex === null || nonHdlIndex === null) {
+    return null; // Invalid input values
+  }
+
+  const smokingStatus: SmokingStatus = smoker ? "smoking" : "nonsmoking";
+
+  // Get the original table value
+  const table = SCORE2_TABLE_LOW_RISK[sex][smokingStatus][ageGroup];
+  const tableValue = table[sbpIndex][nonHdlIndex];
+
+  // Get color from matrix
+  const riskColor = getRiskColorCategory(sex, age, sbp, nonHdl, smoker);
+
+  // If color calculation failed, return null
+  if (riskColor === null) {
+    return null;
+  }
+
+  // Calculate risk percentage based on color and age
+  const riskPercent = getRiskPercentFromColor(riskColor, age);
+
+  return {
+    model: "SCORE2",
+    risk10yr: riskPercent,
+    color: riskColor,
+    tableValue: tableValue,
+  };
 }
-
-/* -------------------------------------------------------------------------- */
-/*                                   Example                                  */
-/* -------------------------------------------------------------------------- */
-
-const example1 = calcScore2Unified({
-  sex: "male",
-  region: "moderate",
-  age: 55,
-  sbp: 145,
-  nonHdl: 4.5,
-  hdl: 1.3,
-  smoker: true,
-});
-
-console.log(`(${example1.model}) 10-yr risk: ${example1.percent.toFixed(1)}%`);
-
-const example2 = calcScore2Unified({
-  sex: "female",
-  region: "low",
-  age: 75,
-  sbp: 160,
-  nonHdl: 4.0,
-  hdl: 1.4,
-  smoker: false,
-});
-
-console.log(`(${example2.model}) 10-yr risk: ${example2.percent.toFixed(1)}%`);

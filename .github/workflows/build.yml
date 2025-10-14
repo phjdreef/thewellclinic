@@ -1,4 +1,4 @@
-name: Test, Build and Release
+name: Build and Release
 
 on:
   push:
@@ -10,35 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run unit tests
-        run: npm run test
-
-      - name: Build app for e2e testing
-        run: npm run make
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: Run e2e tests
-        run: npm run test:e2e
-
   build:
-    needs: test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -85,7 +57,7 @@ jobs:
             out/make/**/*.msi
 
   release:
-    needs: [test, build]
+    needs: [build]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:

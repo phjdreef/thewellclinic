@@ -8,6 +8,7 @@ import {
 import { findLatestBuild, parseElectronApp } from "electron-playwright-helpers";
 
 /*
+ * E2E tests for 360° Health Analysis app
  * Using Playwright with Electron:
  * https://www.electronjs.org/pt/docs/latest/tutorial/automated-testing#using-playwright
  */

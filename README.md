@@ -1,12 +1,28 @@
-# electron-shadcn
+# 360° Health Analysis
 
-Electron in all its glory. Everything you will need to develop your beautiful desktop application.
+A comprehensive desktop health analysis application that provides cardiovascular risk assessment, diabetes risk evaluation, BMI calculations, and weight-related health insights.
 
-![Demo GIF](https://github.com/LuanRoger/electron-shadcn/blob/main/images/demo.gif)
+![Health Analysis Demo](https://via.placeholder.com/800x400/2563eb/ffffff?text=360°+Health+Analysis)
 
-## Libs and tools
+## Features 🏥
 
-To develop a Electron app, you probably will need some UI, test, formatter, style or other kind of library or framework, so let me install and configure some of them to you.
+### Health Assessments
+- **Cardiovascular Risk (SCORE2)** - European cardiovascular risk assessment using official ESC 2021 guidelines
+- **Diabetes Risk** - Comprehensive diabetes risk evaluation with multiple health factors
+- **BMI Analysis** - Body Mass Index calculation with detailed categorization
+- **Waist Circumference** - Abdominal obesity assessment
+- **Weight-Related Health Risk (GGR)** - Overall weight-related health evaluation
+
+### User Experience
+- **Multilingual Support** - Available in English and Dutch
+- **Interactive Charts** - Visual representation of health metrics and risk categories
+- **Form Validation** - Real-time input validation and error handling
+- **Results Export** - Comprehensive health analysis reports
+- **Cross-Platform** - Available for macOS and Windows
+
+## Technology Stack 🛠️
+
+*Built on the excellent [electron-shadcn](https://github.com/LuanRoger/electron-shadcn) boilerplate*
 
 ### Core 🏍️
 
@@ -43,49 +59,55 @@ To develop a Electron app, you probably will need some UI, test, formatter, styl
 
 ### CI/CD 🚀
 
-- Pre-configured [GitHub Actions workflow](https://github.com/LuanRoger/electron-shadcn/blob/main/.github/workflows/playwright.yml), for test with Playwright
+- Automated testing and building with [GitHub Actions](/.github/workflows/build.yml)
+- Cross-platform builds (macOS DMG, Windows EXE/MSI)
+- Automatic releases on version tags
 
-### Project preferences 🎯
+## Health Calculations 📊
 
-- Use Context isolation
-- [React Compiler](https://react.dev/learn/react-compiler) is enabled by default.
-- `titleBarStyle`: hidden (Using custom title bar)
-- Geist as default font
-- Some default styles was applied, check the [`styles`](https://github.com/LuanRoger/electron-shadcn/tree/main/src/styles) directory
-- React DevTools are installed by default
+### SCORE2 Cardiovascular Risk
+- Official European Society of Cardiology (ESC) 2021 guidelines
+- Age-specific risk assessment (<50 years vs 50-69 years)
+- Color-coded risk categories (green/yellow/red)
+- Table-based lookup system for accurate calculations
 
-## Directory structure
+### Diabetes Risk Assessment
+- Multiple risk factors evaluation
+- Point-based scoring system
+- Comprehensive biomarker analysis (glucose, triglycerides, HDL, uric acid)
+- Lifestyle and genetic factors
+
+### BMI & Weight Analysis
+- Standard BMI categories (underweight to obesity classes)
+- Waist circumference assessment
+- Weight-related health risk evaluation
+- Visual chart representations
+
+## Project Structure 📁
 
 ```plaintext
 .
 └── ./src/
-    ├── ./src/assets/
-    │   └── ./src/assets/fonts/
     ├── ./src/components/
-    │   ├── ./src/components/template
-    │   └── ./src/components/ui/
-    ├── ./src/helpers/
-    │   └── ./src/helpers/ipc/
-    ├── ./src/layout/
-    ├── ./src/lib/
-    ├── ./src/pages/
-    ├── ./src/style/
-    └── ./src/tests/
+    │   ├── ./src/components/cards/       # Health input forms
+    │   ├── ./src/components/charts/      # Health visualization charts  
+    │   ├── ./src/components/measures/    # Health calculation engines
+    │   ├── ./src/components/resultPage/  # Health analysis results
+    │   ├── ./src/components/template/    # App layout components
+    │   └── ./src/components/ui/          # Shadcn UI components
+    ├── ./src/localization/              # i18n translations (EN/NL)
+    ├── ./src/pages/                     # App pages (Home/Input/Output)
+    ├── ./src/helpers/                   # Utility functions
+    ├── ./src/assets/                    # Fonts and images
+    └── ./src/tests/                     # Unit and E2E tests
 ```
 
-- `src/`: Main directory
-  - `assets/`: Store assets like images, fonts, etc.
-  - `components/`: Store UI components
-    - `template/`: Store the all not important components used by the template. It doesn't include the `WindowRegion` or the theme toggler, if you want to start an empty project, you can safely delete this directory.
-    - `ui/`: Store Shadcn UI components (this is the default direcotry used by Shadcn UI)
-  - `helpers/`: Store IPC related functions to be called in the renderer process
-    - `ipc/`: Directory to store IPC context and listener functions
-      - Some implementations are already done, like `theme` and `window` for the custom title bar
-  - `layout/`: Directory to store layout components
-  - `lib/`: Store libraries and other utilities
-  - `pages/`: Store app's pages
-  - `style/`: Store global styles
-  - `tests/`: Store tests (from Vitest and Playwright)
+### Key Health Components
+- `cards/basic/` - Basic patient information forms
+- `cards/diabetes/` - Diabetes risk assessment forms  
+- `charts/` - Interactive health metric visualizations
+- `measures/` - SCORE2, BMI, diabetes calculation engines
+- `localization/` - Multi-language support (English/Dutch)
 
 ## NPM script
 
@@ -110,15 +132,14 @@ npm run <script>
 
 > The test scripts involving Playwright require the app be builded before running the tests. So, before run the tests, run the `package`, `make` or `publish` script.
 
-## How to use
+## Development Setup 🚀
 
 1. Clone this repository
 
 ```bash
-git clone https://github.com/LuanRoger/electron-shadcn.git
+git clone https://github.com/phjdreef/thewellclinic.git
+cd thewellclinic
 ```
-
-Or use it as a template on GitHub
 
 2. Install dependencies
 
@@ -126,21 +147,56 @@ Or use it as a template on GitHub
 npm install
 ```
 
-3. Run the app
+3. Run the app in development mode
 
 ```bash
 npm run start
 ```
 
-## Used by
+4. Build for production
 
-- [yaste](https://github.com/LuanRoger/yaste) - yaste (Yet another super ₛᵢₘₚₗₑ text editor) is a text editor, that can be used as an alternative to the native text editor of your SO, maybe.
-- [eletric-drizzle](https://github.com/LuanRoger/electric-drizzle) - shadcn-ui and Drizzle ORM with Electron.
-- [Wordle Game](https://github.com/masonyekta/wordle-game) - A Wordle game which features interactive gameplay, cross-platform compatibility, and integration with a custom Wordle API for word validation and letter correctness.
-- [Mehr 🌟](https://github.com/xmannii/MehrLocalChat) - A modern, elegant local AI chatbot application using Electron, React, shadcn/ui, and Ollama.
+```bash
+npm run make
+```
 
-> Does you've used this template in your project? Add it here and open a PR.
+## Building & Distribution 📦
+
+### Local Development
+```bash
+npm run start          # Development mode
+npm run test           # Run unit tests  
+npm run test:e2e       # Run end-to-end tests
+npm run make           # Build distributables
+```
+
+### Automated Builds
+- **Push to main**: Triggers automated testing and building
+- **Create version tag**: `git tag v1.0.0 && git push origin v1.0.0`
+- **Download**: Artifacts available in GitHub Actions or Releases
+
+### Supported Platforms
+- **macOS**: DMG installer for Apple Silicon and Intel
+- **Windows**: EXE installer and MSI package
+
+## Health Data & Privacy 🔒
+
+- **Local Processing**: All health calculations performed locally
+- **No Data Collection**: Patient data never leaves the device
+- **Secure Storage**: Uses Electron's secure storage mechanisms
+- **GDPR Compliant**: No personal data transmission or storage
+
+## Medical Disclaimer ⚕️
+
+This application is for educational and informational purposes only. It is not intended to be a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
+
+## Credits & Acknowledgments 🙏
+
+- Built on [electron-shadcn](https://github.com/LuanRoger/electron-shadcn) boilerplate by [LuanRoger](https://github.com/LuanRoger)
+- SCORE2 calculations based on [ESC 2021 Guidelines](https://academic.oup.com/eurheartj/article/42/34/3227/6358713)
+- Health risk assessments based on established medical guidelines
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/LuanRoger/electron-shadcn/blob/main/LICENSE) file for details.
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

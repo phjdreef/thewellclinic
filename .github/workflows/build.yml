@@ -11,7 +11,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        include:
+          - os: macos-latest
+            platform: darwin
+            artifact_name: macOS
+          - os: windows-latest
+            platform: win32
+            artifact_name: Windows
 
     steps:
       - name: Checkout code
@@ -29,8 +35,18 @@ jobs:
       - name: Build and package
         run: npm run make
 
-      - name: Upload artifacts
+      - name: Upload macOS artifacts
+        if: matrix.platform == 'darwin'
         uses: actions/upload-artifact@v4
         with:
-          name: app-${{ matrix.os }}
-          path: out/make/**/*
+          name: ${{ github.event.repository.name }}-${{ matrix.artifact_name }}
+          path: out/make/**/*.zip
+
+      - name: Upload Windows artifacts
+        if: matrix.platform == 'win32'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-${{ matrix.artifact_name }}
+          path: |
+            out/make/**/*.exe
+            out/make/**/*.msi

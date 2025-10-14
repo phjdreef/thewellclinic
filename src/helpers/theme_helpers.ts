@@ -4,12 +4,12 @@ const THEME_KEY = "theme";
 
 export interface ThemePreferences {
   system: ThemeMode;
-  local: ThemeMode | null;
+  local: ThemeMode | undefined;
 }
 
 export async function getCurrentTheme(): Promise<ThemePreferences> {
   const currentTheme = await window.themeMode.current();
-  const localTheme = localStorage.getItem(THEME_KEY) as ThemeMode | null;
+  const localTheme = localStorage.getItem(THEME_KEY) as ThemeMode | undefined;
 
   return {
     system: currentTheme,

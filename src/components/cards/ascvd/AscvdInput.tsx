@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FieldNumberLabel } from "@/components/ui/custom/fieldNumberLabel";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useStore } from "@/hooks/useStore";
@@ -18,16 +19,13 @@ export function AscvdInput(): JSX.Element {
         <CardTitle>{t("ascvd")}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="ascvd">{t("ascvd")}</Label>
-          <Input
-            id="ascvd"
-            type="number"
-            placeholder={t("enterRisc")}
-            value={ascvd || ""}
-            onChange={(e) => setAscvd(Number(e.target.value))}
-          />
-        </div>
+        <FieldNumberLabel
+          id="ascvd"
+          placeholder={t("enterRisc")}
+          value={ascvd || undefined}
+          onChange={(e) => setAscvd(e)}
+          label={t("ascvd")}
+        />
       </CardContent>
     </Card>
   );

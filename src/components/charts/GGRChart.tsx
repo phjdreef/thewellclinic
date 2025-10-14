@@ -12,15 +12,22 @@ import {
 
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useTranslation } from "react-i18next";
-import { GGR } from "@/hooks/useStore";
+import { GgrCategory } from "../measures/calcGGR";
+import { useStore } from "@/hooks/useStore";
 
-export const GgrChartComponent = ({ ggr }: { ggr: GGR }) => {
+export const GgrChartComponent = () => {
   const { t } = useTranslation();
+  const { ggr } = useStore();
 
-  const ggrValueMap: Record<Exclude<GGR, null>, number> = {
+  if (!ggr) {
+    return null;
+  }
+
+  const ggrValueMap: Record<Exclude<GgrCategory, undefined>, number> = {
+    normal: 0,
     lightIncreased: 0.5,
     moderateIncreased: 1.5,
-    highIncreased: 2.5,
+    stronglyIncreased: 2.5,
     extremeIncreased: 3.5,
   };
 

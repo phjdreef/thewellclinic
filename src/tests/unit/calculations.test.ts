@@ -4,7 +4,7 @@ import {
   calcGgrCategory,
   GgrInput,
   GgrResult,
-} from "../../components/cards/measures/calculateGGR";
+} from "../../components/measures/calcGGR";
 
 test("calcGgrCategory throws error for non-positive BMI", () => {
   expect(() =>

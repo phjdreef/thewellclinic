@@ -1,91 +1,120 @@
+import { BmiCategory } from "@/components/measures/calcBmi";
+import { GgrCategory } from "@/components/measures/calcGGR";
 import { create } from "zustand";
 
 export type Gender = "male" | "female";
 
-export type GgrCategory =
-  | "normal"
-  | "lightIncreased"
-  | "moderateIncreased"
-  | "stronglyIncreased"
-  | "extremeIncreased";
-
-export type BmiCategory =
-  | "underWeight"
-  | "normalWeight"
-  | "overWeight"
-  | "obeseClass1"
-  | "obeseClass2"
-  | "obeseClass3";
+export interface DiabetesFormState {
+  sex: Gender;
+  age55to64: boolean;
+  diabeticMother: boolean;
+  diabeticFather: boolean;
+  hypertension: boolean;
+  blackRace: boolean;
+  neverOrFormerDrinker: boolean;
+  waistCm?: number;
+  heightCm?: number;
+  pulse?: number;
+  glucoseMmol?: number;
+  trigMmol?: number;
+  hdlMmol?: number;
+  uricUmol?: number;
+}
 
 type Store = {
-  name: string | null;
-  setName: (newName: string) => void;
-  age: number | null;
-  setAge: (newAge: number | null) => void;
-  gender: Gender | null;
+  name: string | undefined;
+  setName: (newName: string | undefined) => void;
+  age: number | undefined;
+  setAge: (newAge: number | undefined) => void;
+  gender: Gender;
   setGender: (newGender: Gender) => void;
-  weight: number | null;
-  setWeight: (newWeight: number) => void;
-  waist: number | null;
-  setWaist: (newWaist: number) => void;
-  height: number | null;
-  setHeight: (newHeight: number) => void;
-  bmi: number | null;
-  setBmi: (newBmi: number | null) => void;
-  bmiCategory: BmiCategory | null;
-  setBmiCategory: (newBmiCategory: BmiCategory | null) => void;
-  ggr: GgrCategory | null;
-  setGgr: (newGGR: GgrCategory) => void;
-  ascvd: number | null;
-  setAscvd: (newAscvd: number | null) => void;
-  diabetes: number | null;
-  setDiabetes: (newDiabetes: number | null) => void;
+  weight: number | undefined;
+  setWeight: (newWeight: number | undefined) => void;
+  waist: number | undefined;
+  setWaist: (newWaist: number | undefined) => void;
+  height: number | undefined;
+  setHeight: (newHeight: number | undefined) => void;
+  systolic: number | undefined;
+  setSystolic: (newSystolic: number | undefined) => void;
+  comorbidity: boolean;
+  setComorbidity: (newComorbidity: boolean) => void;
+  smoking: boolean;
+  setSmoking: (newSmoking: boolean) => void;
+  bmi: number | undefined;
+  setBmi: (newBmi: number | undefined) => void;
+  bmiCategory: BmiCategory | undefined;
+  setBmiCategory: (newBmiCategory: BmiCategory | undefined) => void;
+  ggr: GgrCategory | undefined;
+  setGgr: (newGGR: GgrCategory | undefined) => void;
+  ascvd: number | undefined;
+  setAscvd: (newAscvd: number | undefined) => void;
+  diabetes: number | undefined;
+  setDiabetes: (newDiabetes: number | undefined) => void;
+  diabetesRisc: number | undefined;
+  setDiabetesRisc: (newDiabetesRisc: number | undefined) => void;
+  diabetesForm: DiabetesFormState | undefined;
+  setDiabetesForm: (newDiabetesForm: DiabetesFormState | undefined) => void;
   texts: {
-    overall_result_header: string | null;
-    bmi_result_header: string | null;
-    waist_result_header: string | null;
-    hip_result_header: string | null;
-    ggr_result_header: string | null;
-    ascvd_result_header: string | null;
-    diabetes_result_header: string | null;
+    overall_result_header: string | undefined;
+    bmi_result_header: string | undefined;
+    waist_result_header: string | undefined;
+    hip_result_header: string | undefined;
+    ggr_result_header: string | undefined;
+    ascvd_result_header: string | undefined;
+    diabetes_result_header: string | undefined;
   };
-  setTexts: (newTexts: { i: string; content: string | null }) => void;
+  setTexts: (newTexts: { i: string; content: string | undefined }) => void;
 };
 
 export const useStore = create<Store>()((set) => ({
-  name: null,
-  setName: (newName: string) => set({ name: newName }),
-  age: null,
-  setAge: (newAge: number | null) => set({ age: newAge }),
-  gender: null,
+  name: undefined,
+  setName: (newName: string | undefined) => set({ name: newName }),
+  age: undefined,
+  setAge: (newAge: number | undefined) => set({ age: newAge }),
+  gender: "male",
   setGender: (newGender: "male" | "female") => set({ gender: newGender }),
-  weight: null,
-  setWeight: (newWeight: number) => set({ weight: newWeight }),
-  waist: null,
-  setWaist: (newWaist: number) => set({ waist: newWaist }),
-  height: null,
-  setHeight: (newHeight: number) => set({ height: newHeight }),
-  bmi: null,
-  setBmi: (newBmi: number | null) => set({ bmi: newBmi }),
-  bmiCategory: null,
-  setBmiCategory: (newBmiCategory: BmiCategory | null) =>
+  weight: undefined,
+  setWeight: (newWeight: number | undefined) => set({ weight: newWeight }),
+  waist: undefined,
+  setWaist: (newWaist: number | undefined) => set({ waist: newWaist }),
+  height: undefined,
+  setHeight: (newHeight: number | undefined) => set({ height: newHeight }),
+  systolic: undefined,
+  setSystolic: (newSystolic: number | undefined) =>
+    set({ systolic: newSystolic }),
+  comorbidity: false,
+  setComorbidity: (newComorbidity: boolean) =>
+    set({ comorbidity: newComorbidity }),
+  smoking: false,
+  setSmoking: (newSmoking: boolean) => set({ smoking: newSmoking }),
+  bmi: undefined,
+  setBmi: (newBmi: number | undefined) => set({ bmi: newBmi }),
+  bmiCategory: undefined,
+  setBmiCategory: (newBmiCategory: BmiCategory | undefined) =>
     set({ bmiCategory: newBmiCategory }),
-  ggr: null,
-  setGgr: (newGGR: GgrCategory) => set({ ggr: newGGR }),
-  ascvd: null,
-  setAscvd: (newAscvd: number | null) => set({ ascvd: newAscvd }),
-  diabetes: null,
-  setDiabetes: (newDiabetes: number | null) => set({ diabetes: newDiabetes }),
+  ggr: undefined,
+  setGgr: (newGGR: GgrCategory | undefined) => set({ ggr: newGGR }),
+  ascvd: undefined,
+  setAscvd: (newAscvd: number | undefined) => set({ ascvd: newAscvd }),
+  diabetes: undefined,
+  setDiabetes: (newDiabetes: number | undefined) =>
+    set({ diabetes: newDiabetes }),
+  diabetesRisc: undefined,
+  setDiabetesRisc: (newDiabetesRisc: number | undefined) =>
+    set({ diabetesRisc: newDiabetesRisc }),
+  diabetesForm: undefined,
+  setDiabetesForm: (newDiabetesForm: DiabetesFormState | undefined) =>
+    set({ diabetesForm: newDiabetesForm }),
   texts: {
-    overall_result_header: null,
-    bmi_result_header: null,
-    waist_result_header: null,
-    hip_result_header: null,
-    ggr_result_header: null,
-    ascvd_result_header: null,
-    diabetes_result_header: null,
+    overall_result_header: undefined,
+    bmi_result_header: undefined,
+    waist_result_header: undefined,
+    hip_result_header: undefined,
+    ggr_result_header: undefined,
+    ascvd_result_header: undefined,
+    diabetes_result_header: undefined,
   },
-  setTexts: (newTexts: { i: string; content: string | null }) =>
+  setTexts: (newTexts: { i: string; content: string | undefined }) =>
     set((state) => ({
       texts: {
         ...state.texts,

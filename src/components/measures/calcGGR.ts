@@ -1,4 +1,12 @@
-import { BmiCategory, Gender, GgrCategory } from "@/hooks/useStore";
+import { Gender } from "@/hooks/useStore";
+import { BmiCategory } from "./calcBmi";
+
+export type GgrCategory =
+  | "normal"
+  | "lightIncreased"
+  | "moderateIncreased"
+  | "stronglyIncreased"
+  | "extremeIncreased";
 
 // Types for inputs/outputs
 export interface GgrInput {
@@ -20,6 +28,7 @@ export interface GgrResult {
  * - Risk rises by BMI band and presence of either increased waist OR comorbidity.
  */
 export function calcGgrCategory(input: GgrInput): GgrResult {
+  console.log("🚀 ~ calcGgrCategory ~ input:", input);
   const bmi = input.bmi;
   if (!Number.isFinite(bmi) || bmi <= 0) {
     throw new Error("BMI must be a positive number.");
@@ -33,7 +42,7 @@ export function calcGgrCategory(input: GgrInput): GgrResult {
   const hasComorbidity = !!input.hasComorbidity;
 
   const hasIncreasedWaist =
-    input.waist == null
+    input.waist == undefined
       ? false // unknown waist -> treat as not increased (conservative). Adjust if you prefer "unknown = treat as increased".
       : sex === "male"
         ? input.waist >= 102
@@ -62,5 +71,6 @@ export function calcGgrCategory(input: GgrInput): GgrResult {
       break;
   }
 
+  console.log("🚀 ~ calcGgrCategory ~ GgrCategory:", ggrCategory);
   return { GgrCategory: ggrCategory };
 }

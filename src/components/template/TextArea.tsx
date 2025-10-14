@@ -2,10 +2,10 @@ const TextAreaResult = ({
   content,
   className,
 }: {
-  content?: string | null;
+  content?: string | undefined;
   className?: string;
 }) => {
-  if (!content) return null;
+  if (!content) return undefined;
   return (
     <textarea
       value={content}

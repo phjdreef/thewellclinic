@@ -12,14 +12,20 @@ import {
 
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useTranslation } from "react-i18next";
+import { useStore } from "@/hooks/useStore";
 
-export const BMIChartComponent = ({ bmi }: { bmi: number }) => {
+export const BMIChartComponent = () => {
   const { t } = useTranslation();
+  const { bmi } = useStore();
+
+  if (bmi === undefined) {
+    return null;
+  }
 
   const data = [
     {
       name: t("BMI"),
-      underWeight: 18.5,
+      underWeight: 8.5, // 18.5 - 10 = 8.5 (adjusted for starting at 10)
       normalWeight: 6.5,
       overWeight: 5.0,
       obeseClass1: 5.0,
@@ -32,13 +38,18 @@ export const BMIChartComponent = ({ bmi }: { bmi: number }) => {
 
   return (
     <ChartContainer config={chartConfig} className="h-[80px] w-full">
-      <BarChart layout="vertical" data={data} margin={{ right: 10 }}>
+      <BarChart
+        layout="vertical"
+        data={data}
+        margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+      >
         <CartesianGrid stroke="#f5f5f5" />
         <XAxis
           type="number"
-          domain={[0, 45]}
+          domain={[0, 35]}
           interval={0}
-          ticks={[0, 18.5, 25, 30, 35, 40, 45]}
+          ticks={[0, 8.5, 15, 20, 25, 30, 35]}
+          tickFormatter={(value) => (value + 10).toString()}
         />
         <YAxis dataKey="name" type="category" />
         <Legend />
@@ -79,7 +90,7 @@ export const BMIChartComponent = ({ bmi }: { bmi: number }) => {
           fill="#281415"
           name={t("obeseClass3")}
         />
-        <ReferenceLine x={bmi} strokeWidth={8} stroke="#106da6" />
+        <ReferenceLine x={bmi - 10} strokeWidth={8} stroke="#106da6" />
       </BarChart>
     </ChartContainer>
   );

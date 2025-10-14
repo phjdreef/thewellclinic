@@ -31,7 +31,7 @@ export function OverallResult(): JSX.Element {
   } = useStore();
   const { t } = useTranslation();
 
-  const contentRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(undefined);
   const reactToPrintFn = useReactToPrint({
     pageStyle: `@media print {
       @page {

@@ -1,9 +1,8 @@
-import AscvdInput from "@/components/cards/ascvd/AscvdInput";
-import MeasureInput from "@/components/cards/measures/MeasureInput";
+import { BasicInput } from "@/components/cards/basic/Basic";
+import MeasureInput from "@/components/cards/basic/MeasureInput";
+import BiologicalAge from "@/components/cards/biologicAge/BiologicAge";
 import DiabetesInput from "@/components/cards/diabetes/DiabetesInput";
-import { NameAge } from "@/components/cards/nameAge/NameAge";
 import { TextInput } from "@/components/cards/text/TextInput";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStore } from "@/hooks/useStore";
 import { useTranslation } from "react-i18next";
@@ -18,7 +17,7 @@ export default function Input() {
         {t("titleInputPage")}
       </h1>
       <div>
-        <Tabs defaultValue="account">
+        <Tabs defaultValue="basic">
           <TabsList>
             <TabsTrigger value="basic">{t("tabBasic")}</TabsTrigger>
             <TabsTrigger value="measures">{t("tabMeasures")}</TabsTrigger>
@@ -29,41 +28,27 @@ export default function Input() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="basic">
-            <div className="space-y-4">
-              <NameAge />
+            <div className="mx-auto w-full max-w-4xl space-y-4">
+              <BasicInput />
             </div>
           </TabsContent>
           <TabsContent value="measures">
-            <div className="space-y-4">
+            <div className="mx-auto w-full max-w-4xl space-y-4">
               <MeasureInput />
             </div>
           </TabsContent>
           <TabsContent value="biologicAge">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("biologicalAge")}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <a
-                    href="https://andrewsteele.co.uk/biological-age/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    Berekening: (obv Levine et al 2018)
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="mx-auto w-full max-w-4xl space-y-4">
+              <BiologicalAge />
+            </div>
           </TabsContent>
           <TabsContent value="diabetes">
-            <div className="space-y-4">
+            <div className="mx-auto w-full max-w-4xl space-y-4">
               <DiabetesInput />
             </div>
           </TabsContent>
           <TabsContent value="additionalTexts">
-            <div className="space-y-4">
+            <div className="mx-auto w-full max-w-4xl space-y-4">
               <TextInput element="overall_result_header" />
               <TextInput element="bmi_result_header" />
               <TextInput element="waist_result_header" />

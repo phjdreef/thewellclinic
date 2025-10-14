@@ -17,8 +17,6 @@ export function Markdowntext({
       const filePath = `resources/text/${component}-${beforeAfter}.md`;
       const response = await fetch(filePath);
       if (!response.ok) {
-        console.log("Niet gelukt");
-
         throw new Error("Network response was not ok");
       } else {
         const text = await response.text();

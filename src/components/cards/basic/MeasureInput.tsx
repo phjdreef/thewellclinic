@@ -42,7 +42,6 @@ export function MeasureInput(): JSX.Element {
 
   const calculateMeasures = () => {
     const sbp = systolic && systolic > 0 ? systolic : undefined;
-    console.log("Hiero", gender, age, sbp, nonHdl, smoking);
     if (gender && age && sbp && nonHdl && nonHdl > 0) {
       const score2 = calcScore2Unified({
         age: age,
@@ -54,8 +53,6 @@ export function MeasureInput(): JSX.Element {
       });
       if (!score2) return;
       setScore2(score2);
-      console.log("🚀 ~ calculateMeasures ~ score2:", score2);
-      // setScore2(score2);
     }
     if (weight && weight > 0 && height && height > 0) {
       const bmiValue = calcBmi(weight, height);

@@ -28,7 +28,6 @@ export interface GgrResult {
  * - Risk rises by BMI band and presence of either increased waist OR comorbidity.
  */
 export function calcGgrCategory(input: GgrInput): GgrResult {
-  console.log("🚀 ~ calcGgrCategory ~ input:", input);
   const bmi = input.bmi;
   if (!Number.isFinite(bmi) || bmi <= 0) {
     throw new Error("BMI must be a positive number.");
@@ -71,6 +70,5 @@ export function calcGgrCategory(input: GgrInput): GgrResult {
       break;
   }
 
-  console.log("🚀 ~ calcGgrCategory ~ GgrCategory:", ggrCategory);
   return { GgrCategory: ggrCategory };
 }

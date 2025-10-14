@@ -78,7 +78,6 @@ function DiabetesInput(): JSX.Element {
     return labelMap[key] || key;
   };
 
-  console.log("Form ,", form);
   useEffect(() => {
     setForm((f: DiabetesFormState) => ({
       ...f,

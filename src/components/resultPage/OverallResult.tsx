@@ -13,6 +13,7 @@ import TextAreaResult from "../template/TextArea";
 import { GgrChartComponent } from "../charts/GGRChart";
 import { Score2ChartComponent } from "../charts/Score2Chart";
 import { DiabetesChartComponent } from "../charts/DiabetesChart";
+import { BiologicAgeChartComponent } from "../charts/BiologicAgeChart";
 
 export function OverallResult(): JSX.Element {
   const {
@@ -28,6 +29,7 @@ export function OverallResult(): JSX.Element {
     height,
     weight,
     texts,
+    biologicAge,
   } = useStore();
   const { t } = useTranslation();
 
@@ -53,13 +55,13 @@ export function OverallResult(): JSX.Element {
         </h1>
         {name && name.length > 0 && (
           <p>
-            {t("name")}: <span className="font-bold">{name}</span>
+            {t("name")}: <span className="font-semibold">{name}</span>
           </p>
         )}
         {age && age > 0 && (
           <p>
             {t("age")}:{" "}
-            <span className="font-bold">
+            <span className="font-semibold">
               {age} {t("year")}
             </span>
           </p>
@@ -71,7 +73,7 @@ export function OverallResult(): JSX.Element {
         )}
         <p>
           {t("date")}:{" "}
-          <span className="font-bold">
+          <span className="font-semibold">
             {new Date().toLocaleDateString("nl-NL")}
           </span>
         </p>
@@ -86,7 +88,7 @@ export function OverallResult(): JSX.Element {
             <p className="font-bold">{t("bmi_result_header")}</p>
             <Markdowntext component="bmi" beforeAfter="before" />
             <BMIChartComponent />
-            <span className="font-bold">
+            <span className="font-semibold">
               {t("yourBMI")}: {bmi}
             </span>
             <span className="ml-2">
@@ -94,7 +96,7 @@ export function OverallResult(): JSX.Element {
             </span>
 
             {bmiCategory && (
-              <p className="font-bold">
+              <p className="font-semibold">
                 {t("category")}: {t(bmiCategory)}
               </p>
             )}
@@ -108,7 +110,7 @@ export function OverallResult(): JSX.Element {
             <p className="font-bold">{t("waist_result_header")}</p>
             <Markdowntext component="waist" beforeAfter="before" />
             <WaistChartComponent />
-            <p className="font-bold">
+            <p className="font-semibold">
               {t("yourWaist")}: {waist}
             </p>
             <TextAreaResult content={texts.waist_result_header} />
@@ -122,11 +124,24 @@ export function OverallResult(): JSX.Element {
               <p className="font-bold">{t("ggr_result_header")}</p>
               <Markdowntext component="ggr" beforeAfter="before" />
               <GgrChartComponent />
-              <p className="font-bold">
+              <p className="font-semibold">
                 {t("yourGGR")}: {t(ggr)}
               </p>
               <TextAreaResult content={texts.ggr_result_header} />
               <Markdowntext component="ggr" beforeAfter="after" />
+            </div>
+          </>
+        )}
+        {/* Biological Age */}
+        {!!biologicAge && (
+          <>
+            <div className="mt-10 space-y-4">
+              <p className="font-bold">{t("biologicAge_result_header")}</p>
+              <Markdowntext component="biologicage" beforeAfter="before" />
+              <BiologicAgeChartComponent />
+
+              <TextAreaResult content={texts.biologicAge_result_header} />
+              <Markdowntext component="biologicage" beforeAfter="after" />
             </div>
           </>
         )}

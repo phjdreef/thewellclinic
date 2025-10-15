@@ -4,7 +4,8 @@ import { initReactI18next } from "react-i18next";
 import { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
 
 i18n.use(initReactI18next).init({
-  fallbackLng: "en",
+  lng: "nl-NL", // Set Dutch as default language
+  fallbackLng: "en", // English as fallback
   resources: {
     en: {
       translation: {
@@ -31,6 +32,7 @@ i18n.use(initReactI18next).init({
         waistUnderSize: "Waist Under 88 cm",
         waistOverSize: "Waist Over 88 cm",
         yourWaistHip: "Waist-Hip Ratio",
+        yourBiologicAge: "Your Biological Age",
         waistRatio: "Waist-Hip Ratio",
         waistOk: "Waist ok",
         waistNok: "Waist not ok",
@@ -93,6 +95,10 @@ i18n.use(initReactI18next).init({
         // Cholesterol labels
         nonHdlCholesterol: "Non-HDL Cholesterol (mmol/L)",
         enterNonHdl: "Enter Non-HDL Cholesterol (mmol/L)",
+        biologicalAge: "Biological Age",
+        enterBiologicAge: "Enter Biological Age",
+        chronologicalAge: "Chronological Age",
+        biologicAge: "Biological Age",
 
         //Smoking labels
         smoking: "Smoking",
@@ -107,8 +113,9 @@ i18n.use(initReactI18next).init({
         bmi_result_header: "1.1 Body Mass Index (BMI)",
         waist_result_header: "1.2 Waist Circumference",
         ggr_result_header: "1.3 Weight-Related Health Risk (GGR)",
-        score2_result_header: "1.4 Risk of Cardiovascular Diseases",
-        diabetes_result_header: "1.5 Risk of Diabetes",
+        biologicAge_result_header: "1.4 Biological Age",
+        score2_result_header: "1.5 Risk of Cardiovascular Diseases",
+        diabetes_result_header: "1.6 Risk of Diabetes",
 
         tabBasic: "Basic",
         tabMeasures: "Measures",
@@ -121,6 +128,7 @@ i18n.use(initReactI18next).init({
         bmiChartTitle: "Your Body Mass Index (BMI)",
         ggrChartTitle: "Your Weight-Related Health Risk (GGR)",
         diabetesChartTitle: "Your Risk of Diabetes",
+        biologicalAgeChartTitle: "Your Biological Age",
       },
     },
     "nl-NL": {
@@ -146,6 +154,7 @@ i18n.use(initReactI18next).init({
         yourBMI: "Uw BMI",
         waist: "Buik omvang (cm)",
         yourWaist: "Uw buik omvang",
+        yourBiologicAge: "Uw biologische leeftijd",
         enterWaist: "buik omvang (cm)",
         waistUnderSize: "Buikomtrek is goed",
         waistOverSize: "Buikomtrek is te groot",
@@ -201,6 +210,10 @@ i18n.use(initReactI18next).init({
         // Cholesterol labels
         nonHdlCholesterol: "Non-HDL Cholesterol (mmol/L)",
         enterNonHdl: "Non-HDL Cholesterol (mmol/L)",
+        biologicAge: "Biologische leeftijd",
+        enterBiologicAge: "Biologische leeftijd",
+        chronologicalAge: "Chronologische leeftijd",
+        biologicalAge: "Biologische leeftijd",
 
         //Smoking labels
         smoking: "Roken",
@@ -215,8 +228,9 @@ i18n.use(initReactI18next).init({
         bmi_result_header: "1.1 Body Mass Index (BMI)",
         waist_result_header: "1.2 Buikomtrek",
         ggr_result_header: "1.3 Gewichtsgerelateerd Gezondheidsrisico (GGR)",
-        score2_result_header: "1.4 Risico op Hart- en Vaatziekten",
-        diabetes_result_header: "1.5 Risico op Suikerziekte",
+        biologicAge_result_header: "1.4 Biologische Leeftijd",
+        score2_result_header: "1.5 Risico op Hart- en Vaatziekten",
+        diabetes_result_header: "1.6 Risico op Suikerziekte",
 
         underWeight: "Ondergewicht",
         normalWeight: "Normaal gewicht",
@@ -236,6 +250,7 @@ i18n.use(initReactI18next).init({
         bmiChartTitle: "Uw Body Mass Index (BMI)",
         ggrChartTitle: "Uw gewichtsgerelateerd gezondheidsrisico (GGR)",
         diabetesChartTitle: "Uw risico op suikerziekte",
+        biologicalAgeChartTitle: "Uw biologische leeftijd",
       },
     },
   },

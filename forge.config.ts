@@ -11,6 +11,8 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     executableName: "well-clinic-app", // Use simple name for executable
+    // App icon configuration
+    icon: "./resources/images/w_icon", // Path without extension, Electron will find the right format
     // Copy resources folder to the packaged app
     extraResource: ["./resources"],
     // Note: Code signing requires Apple Developer account ($99/year)

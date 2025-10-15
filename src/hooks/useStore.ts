@@ -45,6 +45,8 @@ type Store = {
   setSmoking: (newSmoking: boolean) => void;
   bmi: number | undefined;
   setBmi: (newBmi: number | undefined) => void;
+  biologicAge: number | undefined;
+  setBiologicAge: (newBiologicAge: number | undefined) => void;
   bmiCategory: BmiCategory | undefined;
   setBmiCategory: (newBmiCategory: BmiCategory | undefined) => void;
   ggr: GgrCategory | undefined;
@@ -61,7 +63,7 @@ type Store = {
     overall_result_header: string | undefined;
     bmi_result_header: string | undefined;
     waist_result_header: string | undefined;
-    hip_result_header: string | undefined;
+    biologicAge_result_header: string | undefined;
     ggr_result_header: string | undefined;
     score2_result_header: string | undefined;
     diabetes_result_header: string | undefined;
@@ -92,6 +94,9 @@ export const useStore = create<Store>()((set) => ({
     set({ comorbidity: newComorbidity }),
   smoking: false,
   setSmoking: (newSmoking: boolean) => set({ smoking: newSmoking }),
+  biologicAge: undefined,
+  setBiologicAge: (newBiologicAge: number | undefined) =>
+    set({ biologicAge: newBiologicAge }),
   bmi: undefined,
   setBmi: (newBmi: number | undefined) => set({ bmi: newBmi }),
   bmiCategory: undefined,
@@ -115,7 +120,7 @@ export const useStore = create<Store>()((set) => ({
     overall_result_header: undefined,
     bmi_result_header: undefined,
     waist_result_header: undefined,
-    hip_result_header: undefined,
+    biologicAge_result_header: undefined,
     ggr_result_header: undefined,
     score2_result_header: undefined,
     diabetes_result_header: undefined,

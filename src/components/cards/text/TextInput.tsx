@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useStore } from "@/hooks/useStore";
 import { JSX } from "react";
@@ -13,6 +12,7 @@ type Props = {
     | "waist_result_header"
     | "hip_result_header"
     | "ggr_result_header"
+    | "biologicAge_result_header"
     | "score2_result_header"
     | "diabetes_result_header";
 };

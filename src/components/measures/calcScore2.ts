@@ -31,7 +31,6 @@ interface Risk10yr {
 
 export interface Score2Result {
   model: "SCORE2" | "SCORE2-OP";
-  risk10yr: Risk10yr; // e.g. "<2.5%", "2.5% - 7.5%", "≥7.5%"
   color: "green" | "yellow" | "red"; // risk category color
   tableValue: number; // original number from the SCORE2 table
 }
@@ -49,19 +48,19 @@ function getAgeGroup(age: number): AgeGroup | null {
 
 // Helper function to map systolic BP to index
 function getSbpIndex(sbp: number): number | null {
-  if (sbp >= 100 && sbp <= 119) return 0;
-  if (sbp >= 120 && sbp <= 139) return 1;
-  if (sbp >= 140 && sbp <= 159) return 2;
-  if (sbp >= 160) return 3; // Use highest category for very high BP
+  if (sbp >= 100 && sbp < 120) return 0;
+  if (sbp >= 120 && sbp < 140) return 1;
+  if (sbp >= 140 && sbp < 160) return 2;
+  if (sbp >= 160 && sbp < 180) return 3; // Use highest category for very high BP
   return null; // SBP out of range
 }
 
 // Helper function to map non-HDL cholesterol to index
 function getNonHdlIndex(nonHdl: number): number | null {
-  if (nonHdl >= 2.0 && nonHdl < 4.0) return 0;
-  if (nonHdl >= 4.0 && nonHdl < 6.0) return 1;
-  if (nonHdl >= 6.0 && nonHdl < 8.0) return 2;
-  if (nonHdl >= 8.0) return 3; // Use highest category for very high non-HDL
+  if (nonHdl >= 3.0 && nonHdl < 4.0) return 0;
+  if (nonHdl >= 4.0 && nonHdl < 5.0) return 1;
+  if (nonHdl >= 5.0 && nonHdl < 6.0) return 2;
+  if (nonHdl >= 6.0 && nonHdl < 7.0) return 3; // Use highest category for very high non-HDL
   return null; // Non-HDL out of range (< 2.0)
 }
 
@@ -87,34 +86,6 @@ export function getRiskColorCategory(
   return colorTable[sbpIndex][nonHdlIndex];
 }
 
-// Convert risk color to age-appropriate risk description
-export function getRiskPercentFromColor(
-  color: RiskColor,
-  age: number,
-): Risk10yr {
-  if (age < 50) {
-    // For patients < 50 years
-    switch (color) {
-      case "green":
-        return { step: 1, value: 2.5, description: "<2.5%" };
-      case "yellow":
-        return { step: 2, value: 5, description: "2.5% - 7.5%" };
-      case "red":
-        return { step: 3, value: 7.5, description: "≥7.5%" };
-    }
-  } else {
-    // For patients 50-69 years
-    switch (color) {
-      case "green":
-        return { step: 1, value: 5, description: "<5%" };
-      case "yellow":
-        return { step: 2, value: 7.5, description: "5% - 10%" };
-      case "red":
-        return { step: 3, value: 10, description: "≥10%" };
-    }
-  }
-}
-
 // Main SCORE2 calculation function
 export function calcScore2Unified(input: Score2Input): Score2Result | null {
   const { sex, age, sbp, nonHdl, smoker } = input;
@@ -128,6 +99,17 @@ export function calcScore2Unified(input: Score2Input): Score2Result | null {
   const sbpIndex = getSbpIndex(sbp);
   const nonHdlIndex = getNonHdlIndex(nonHdl);
 
+  console.log(
+    "🚀 ~ calcScore2Unified ~ tableValue:",
+    sex,
+    age,
+    sbp,
+    nonHdl,
+    smoker,
+    { ageGroup },
+    { sbpIndex },
+    { nonHdlIndex },
+  );
   // Check if any of the values are out of range
   if (ageGroup === null || sbpIndex === null || nonHdlIndex === null) {
     return null; // Invalid input values
@@ -147,12 +129,8 @@ export function calcScore2Unified(input: Score2Input): Score2Result | null {
     return null;
   }
 
-  // Calculate risk percentage based on color and age
-  const riskPercent = getRiskPercentFromColor(riskColor, age);
-
   return {
     model: "SCORE2",
-    risk10yr: riskPercent,
     color: riskColor,
     tableValue: tableValue,
   };

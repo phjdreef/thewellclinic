@@ -27,38 +27,26 @@ export const Score2ChartComponent = () => {
   if (age === undefined) {
     return null;
   }
-  if (score2.risk10yr === null) {
-    return null;
-  }
 
   const formatXAxisTick = (value: number) => {
-    switch (value) {
-      case 1:
-        if (age < 50) {
-          return "<2,5%";
-        } else if (age >= 50 && age < 69) {
-          return "<5,0%";
-        }
-      case 2:
-        if (age < 50) {
-          return ">7,5%";
-        } else if (age >= 50 && age < 69) {
-          return ">10%";
-        }
-
-      default:
-        return "";
-    }
+    return `${value}%`;
   };
 
-  // Data from https://www.bhf.org.uk/informationsupport/risk-factors/atherosclerotic-cardiovascular-disease-score2-risk
+  // Determine maximum value and risk thresholds based on age
+  const maxValue = age < 50 ? 11 : 19;
+  const lowThreshold = age < 50 ? 2.5 : 5;
+  const moderateThreshold = age < 50 ? 7.5 : 10;
 
+  // Create tick array based on thresholds
+  const ticks = [0, lowThreshold, moderateThreshold, maxValue];
+
+  // Data representing stacked bars with age-appropriate risk segments
   const data = [
     {
       name: t("score2Risc"),
-      mediumRisc: 1,
-      highRisc: 1,
-      extremeRisc: 1,
+      lowRisc: lowThreshold,
+      mediumRisc: moderateThreshold - lowThreshold,
+      highRisc: maxValue - moderateThreshold,
     },
   ];
 
@@ -77,34 +65,34 @@ export const Score2ChartComponent = () => {
           <XAxis
             type="number"
             tickFormatter={formatXAxisTick}
-            domain={[0, 3]}
+            domain={[0, maxValue]}
+            ticks={ticks}
             interval={0}
-            ticks={[1, 2, 3]}
           />
           <YAxis dataKey="name" type="category" />
           <Legend />
 
           <Bar
-            dataKey="mediumRisc"
+            dataKey="lowRisc"
             stackId="a"
             fill="#EBE3DA"
+            name={t("lowRisc")}
+          />
+          <Bar
+            dataKey="mediumRisc"
+            stackId="a"
+            fill="#A03F45"
             name={t("mediumRisc")}
           />
           <Bar
             dataKey="highRisc"
             stackId="a"
-            fill="#A03F45"
-            name={t("highRisc")}
-          />
-          <Bar
-            dataKey="extremeRisc"
-            stackId="a"
             fill="#4C2024"
-            name={t("extremeRisc")}
+            name={t("highRisc")}
           />
 
           <ReferenceLine
-            x={-0.5 + score2.risk10yr.step}
+            x={score2.tableValue}
             strokeWidth={8}
             stroke="#106da6"
           />
@@ -112,7 +100,7 @@ export const Score2ChartComponent = () => {
       </ChartContainer>
 
       <p className="font-semibold">
-        {t("yourscore2")}: {score2.risk10yr.description}
+        {t("yourscore2")}: {score2.tableValue}%
       </p>
     </div>
   );

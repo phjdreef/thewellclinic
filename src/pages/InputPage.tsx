@@ -53,6 +53,7 @@ export default function Input() {
               <TextInput element="bmi_result_header" />
               <TextInput element="waist_result_header" />
               <TextInput element="ggr_result_header" />
+              <TextInput element="biologicAge_result_header" />
               <TextInput element="score2_result_header" />
               <TextInput element="diabetes_result_header" />
             </div>

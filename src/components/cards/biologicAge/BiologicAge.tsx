@@ -1,9 +1,13 @@
 import { JSX } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { useTranslation } from "react-i18next";
+import { FieldNumberLabel } from "@/components/ui/custom/fieldNumberLabel";
+import { useStore } from "@/hooks/useStore";
+import { BiologicAgeChartComponent } from "@/components/charts/BiologicAgeChart";
 
 export function BiologicalAge(): JSX.Element {
   const { t } = useTranslation();
+  const { biologicAge, setBiologicAge } = useStore();
   return (
     <Card>
       <CardHeader>
@@ -20,6 +24,14 @@ export function BiologicalAge(): JSX.Element {
             Berekening: (obv Levine et al 2018)
           </a>
         </div>
+        <FieldNumberLabel
+          id="biologicAge"
+          placeholder={t("enterBiologicAge")}
+          value={biologicAge || undefined}
+          onChange={(e) => setBiologicAge(e)}
+          label={t("biologicAge")}
+        />
+        <BiologicAgeChartComponent />
       </CardContent>
     </Card>
   );

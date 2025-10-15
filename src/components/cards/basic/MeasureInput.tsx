@@ -51,8 +51,11 @@ export function MeasureInput(): JSX.Element {
         sex: gender,
         region: "low",
       });
-      if (!score2) return;
-      setScore2(score2);
+      if (!score2) {
+        setScore2(undefined);
+      } else {
+        setScore2(score2);
+      }
     }
     if (weight && weight > 0 && height && height > 0) {
       const bmiValue = calcBmi(weight, height);

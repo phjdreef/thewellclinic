@@ -11,6 +11,13 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     executableName: "well-clinic-app", // Use simple name for executable
+    // Copy resources folder to the packaged app
+    extraResource: ["./resources"],
+    // Note: Code signing requires Apple Developer account ($99/year)
+    // Uncomment and configure when ready for distribution:
+    // osxSign: {
+    //   identity: "Developer ID Application: Your Name (TEAM_ID)"
+    // }
   },
   rebuildConfig: {},
   makers: [

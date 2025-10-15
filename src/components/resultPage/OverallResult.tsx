@@ -88,18 +88,6 @@ export function OverallResult(): JSX.Element {
             <p className="font-bold">{t("bmi_result_header")}</p>
             <Markdowntext component="bmi" beforeAfter="before" />
             <BMIChartComponent />
-            <span className="font-semibold">
-              {t("yourBMI")}: {bmi}
-            </span>
-            <span className="ml-2">
-              ({t("heightDescr")} {height} cm, {t("weightDescr")} {weight} kg)
-            </span>
-
-            {bmiCategory && (
-              <p className="font-semibold">
-                {t("category")}: {t(bmiCategory)}
-              </p>
-            )}
             <TextAreaResult content={texts.bmi_result_header} />
             <Markdowntext component="bmi" beforeAfter="after" />
           </div>
@@ -110,9 +98,6 @@ export function OverallResult(): JSX.Element {
             <p className="font-bold">{t("waist_result_header")}</p>
             <Markdowntext component="waist" beforeAfter="before" />
             <WaistChartComponent />
-            <p className="font-semibold">
-              {t("yourWaist")}: {waist}
-            </p>
             <TextAreaResult content={texts.waist_result_header} />
             <Markdowntext component="waist" beforeAfter="after" />
           </div>
@@ -124,9 +109,6 @@ export function OverallResult(): JSX.Element {
               <p className="font-bold">{t("ggr_result_header")}</p>
               <Markdowntext component="ggr" beforeAfter="before" />
               <GgrChartComponent />
-              <p className="font-semibold">
-                {t("yourGGR")}: {t(ggr)}
-              </p>
               <TextAreaResult content={texts.ggr_result_header} />
               <Markdowntext component="ggr" beforeAfter="after" />
             </div>
@@ -139,7 +121,6 @@ export function OverallResult(): JSX.Element {
               <p className="font-bold">{t("biologicAge_result_header")}</p>
               <Markdowntext component="biologicage" beforeAfter="before" />
               <BiologicAgeChartComponent />
-
               <TextAreaResult content={texts.biologicAge_result_header} />
               <Markdowntext component="biologicage" beforeAfter="after" />
             </div>

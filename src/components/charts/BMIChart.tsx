@@ -16,7 +16,7 @@ import { useStore } from "@/hooks/useStore";
 
 export const BMIChartComponent = () => {
   const { t } = useTranslation();
-  const { bmi, bmiCategory } = useStore();
+  const { bmi, bmiCategory, height, weight } = useStore();
 
   if (bmi === undefined) {
     return null;
@@ -38,7 +38,7 @@ export const BMIChartComponent = () => {
 
   return (
     <div className="w-full">
-      <h3 className="mb-4 text-lg font-semibold">{t("bmiChartTitle")}</h3>
+      {/* <h3 className="mb-4 text-lg font-semibold">{t("bmiChartTitle")}</h3> */}
       <ChartContainer config={chartConfig} className="h-[80px] w-full">
         <BarChart
           layout="vertical"
@@ -97,12 +97,17 @@ export const BMIChartComponent = () => {
       </ChartContainer>
 
       {bmi && bmi > 0 && (
-        <div className="pt-1 pb-4">
-          <p className="font-semibold">
+        <div className="mt-4 mb-4">
+          <span className="font-semibold">
             {t("yourBMI")}: {bmi}
-          </p>
+          </span>
+
+          <span className="ml-2">
+            ({t("heightDescr")} {height} cm, {t("weightDescr")} {weight} kg)
+          </span>
+
           {bmiCategory && (
-            <p className="text-muted-foreground text-sm">
+            <p className="font-semibold">
               {t("category")}: {t(bmiCategory)}
             </p>
           )}

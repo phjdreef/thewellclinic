@@ -32,9 +32,9 @@ export const BiologicAgeChartComponent = () => {
 
   return (
     <div className="w-full">
-      <h3 className="mb-4 text-lg font-semibold">
+      {/* <h3 className="mb-4 text-lg font-semibold">
         {t("biologicalAgeChartTitle")}
-      </h3>
+      </h3> */}
 
       {/* Age Comparison Rectangles */}
       {age && biologicAge && (

@@ -6,13 +6,14 @@ import { MakerDeb } from "@electron-forge/maker-deb";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
+import path from "path";
 
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     executableName: "well-clinic-app", // Use simple name for executable
     // App icon configuration
-    icon: "./resources/images/w_icon", // Path without extension, Electron will find the right format
+    icon: path.resolve(__dirname, "w_icon.icns"),
     // Copy resources folder to the packaged app
     extraResource: ["./resources"],
     // Note: Code signing requires Apple Developer account ($99/year)
@@ -23,8 +24,17 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
-    new MakerDMG({}, ["darwin"]),
+    new MakerSquirrel({
+      iconUrl:
+        "https://raw.githubusercontent.com/phjdreef/thewellclinic/main/resources/images/w_icon.ico",
+      setupIcon: "./resources/images/w_icon.ico",
+    }),
+    new MakerDMG(
+      {
+        icon: "./resources/images/w_icon.icns",
+      },
+      ["darwin"],
+    ),
     new MakerZIP({}, ["darwin"]),
     new MakerDeb({}, ["linux"]), // Minimal Linux maker for testing
   ],

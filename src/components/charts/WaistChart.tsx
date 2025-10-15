@@ -36,12 +36,12 @@ export const WaistChartComponent = () => {
 
   return (
     <div className="w-full">
-      <h3 className="mb-4 text-lg font-semibold">{t("waistChartTitle")}</h3>
+      {/* <h3 className="mb-4 text-lg font-semibold">{t("waistChartTitle")}</h3> */}
       <ChartContainer config={chartConfig} className="h-[80px] w-full">
         <BarChart
           layout="vertical"
           data={data}
-          margin={{ top: 5, right: 30, bottom: 5, left: 5 }}
+          margin={{ top: 5, right: 30, bottom: 5, left: 20 }}
         >
           <CartesianGrid stroke="#f5f5f5" />
           <XAxis

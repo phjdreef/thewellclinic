@@ -101,7 +101,7 @@ export const DiabetesChartComponent = () => {
 
   return (
     <div className="w-full">
-      <h3 className="mb-4 text-lg font-semibold">{t("diabetesChartTitle")}</h3>
+      {/* <h3 className="mb-4 text-lg font-semibold">{t("diabetesChartTitle")}</h3> */}
       <ChartContainer
         config={chartConfig}
         className="aspect-auto h-[80px] w-full"
@@ -156,9 +156,11 @@ export const DiabetesChartComponent = () => {
           <ReferenceLine x={chartPosition} strokeWidth={8} stroke="#106da6" />
         </BarChart>
       </ChartContainer>
-      <p className="font-bold">
-        {t("yourDiabetes")}: {round(diabetesRisc * 100, 1)} %
-      </p>
+      <div className="mt-4 mb-4">
+        <p className="font-semibold">
+          {t("yourDiabetes")}: {round(diabetesRisc * 100, 1)} %
+        </p>
+      </div>
     </div>
   );
 };

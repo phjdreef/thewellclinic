@@ -54,7 +54,7 @@ export const Score2ChartComponent = () => {
 
   return (
     <div className="w-full">
-      <h3 className="mb-4 text-lg font-semibold">{t("score2ChartTitle")}</h3>
+      {/* <h3 className="mb-4 text-lg font-semibold">{t("score2ChartTitle")}</h3> */}
       <ChartContainer config={chartConfig} className="h-[80px] w-full">
         <BarChart
           layout="vertical"

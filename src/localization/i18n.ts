@@ -54,6 +54,7 @@ i18n.use(initReactI18next).init({
         male: "Male",
         female: "Female",
 
+        normal: "Normal",
         lightIncreased: "Lightly increased",
         moderateIncreased: "Moderately increased",
         highIncreased: "Highly increased",
@@ -143,9 +144,9 @@ i18n.use(initReactI18next).init({
         wellClinic: "The Well Clinic",
         BMI: "BMI",
         ggr: "GGR",
-        GGR: "Gewichtsgerelateerd Gezondheidsrisico",
+        GGR: "Gewichtsgerelateerd gezondheidsrisico",
         year: "jaar",
-        yourGGR: "Uw Gewichtsgerelateerd Gezondheidsrisico",
+        yourGGR: "Uw gewichtsgerelateerd gezondheidsrisico",
         appName: "WellClinic Gezondheidsanalyse",
         titleHomePage: "Home Pagina",
         titleInputPage: "Invoer",
@@ -172,6 +173,7 @@ i18n.use(initReactI18next).init({
         diabetes: "Suikerziekte",
         comorbidity: "Comorbiditeit",
 
+        normal: "Normaal",
         lightIncreased: "Licht verhoogd",
         moderateIncreased: "Matig verhoogd",
         highIncreased: "Sterk verhoogd",

@@ -1,17 +1,17 @@
 "use client";
 
+import { BMIChartComponent } from "@/components/charts/BMIChart";
+import { GgrChartComponent } from "@/components/charts/GGRChart";
+import { Score2ChartComponent } from "@/components/charts/Score2Chart";
+import { WaistChartComponent } from "@/components/charts/WaistChart";
+import { calcBmi, determineBmiCategory } from "@/components/measures/calcBmi";
+import { calcScore2Unified } from "@/components/measures/calcScore2";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FieldNumberLabel } from "@/components/ui/custom/fieldNumberLabel";
 import { useStore } from "@/hooks/useStore";
 import { JSX, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { calcGgrCategory } from "../../measures/calcGGR";
-import { calcBmi, determineBmiCategory } from "@/components/measures/calcBmi";
-import { GgrChartComponent } from "@/components/charts/GGRChart";
-import { BMIChartComponent } from "@/components/charts/BMIChart";
-import { WaistChartComponent } from "@/components/charts/WaistChart";
-import { Score2ChartComponent } from "@/components/charts/Score2Chart";
-import { calcScore2Unified } from "@/components/measures/calcScore2";
 
 export function MeasureInput(): JSX.Element {
   const {
@@ -22,8 +22,8 @@ export function MeasureInput(): JSX.Element {
     waist,
     setWaist,
     bmi,
+    ggr,
     setBmi,
-    bmiCategory,
     setBmiCategory,
     setGgr,
     gender,
@@ -41,31 +41,18 @@ export function MeasureInput(): JSX.Element {
   const { t } = useTranslation();
 
   const calculateMeasures = () => {
-    const sbp = systolic && systolic > 0 ? systolic : undefined;
-    if (gender && age && sbp && nonHdl && nonHdl > 0) {
-      const score2 = calcScore2Unified({
-        age: age,
-        sbp: sbp,
-        nonHdl: nonHdl,
-        smoker: smoking,
-        sex: gender,
-        region: "low",
-      });
-      if (!score2) {
-        setScore2(undefined);
-      } else {
-        setScore2(score2);
-      }
-    }
+    // Calculate BMI and related metrics
+    let bmiValue: number | undefined;
+    let bmiCategory: ReturnType<typeof determineBmiCategory> | undefined;
+
     if (weight && weight > 0 && height && height > 0) {
-      const bmiValue = calcBmi(weight, height);
+      bmiValue = calcBmi(weight, height);
+      bmiCategory = determineBmiCategory(bmiValue);
       setBmi(bmiValue);
-      const bmiCategory = determineBmiCategory(bmiValue);
       setBmiCategory(bmiCategory);
 
-      // Determine BMI category
-
-      if (waist && gender && bmiValue > 0 && waist > 0) {
+      // Calculate GGR if we have all required data
+      if (waist && waist > 0 && gender && bmiValue > 0) {
         const ggrCategory = calcGgrCategory({
           bmi: bmiValue,
           bmiCategory: bmiCategory,
@@ -74,13 +61,29 @@ export function MeasureInput(): JSX.Element {
           hasComorbidity: comorbidity,
         });
         setGgr(ggrCategory.GgrCategory);
+      } else {
+        setGgr(undefined);
       }
-
-      // calculate Score2 risk
     } else {
+      // Clear BMI-related values when inputs are invalid
       setBmi(undefined);
       setBmiCategory(undefined);
       setGgr(undefined);
+    }
+
+    // Calculate Score2 risk
+    if (gender && age && systolic && systolic > 0 && nonHdl) {
+      const score2Result = calcScore2Unified({
+        age: age,
+        sbp: systolic,
+        nonHdl: nonHdl,
+        smoker: smoking,
+        sex: gender,
+        region: "low",
+      });
+      setScore2(score2Result || undefined);
+    } else {
+      setScore2(undefined);
     }
   };
 
@@ -89,12 +92,12 @@ export function MeasureInput(): JSX.Element {
   }, [
     weight,
     height,
-    comorbidity,
     waist,
     gender,
-    nonHdl,
-    systolic,
+    comorbidity,
     age,
+    systolic,
+    nonHdl,
     smoking,
   ]);
 
@@ -141,9 +144,13 @@ export function MeasureInput(): JSX.Element {
           label={t("nonHdlCholesterol")}
         />
 
+        {!!waist && <hr />}
         <WaistChartComponent />
+        {!!bmi && <hr />}
         <BMIChartComponent />
+        {!!ggr && <hr />}
         <GgrChartComponent />
+        {!!score2 && <hr />}
         <Score2ChartComponent />
       </CardContent>
     </Card>

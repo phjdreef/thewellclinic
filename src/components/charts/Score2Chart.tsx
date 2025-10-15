@@ -100,7 +100,7 @@ export const Score2ChartComponent = () => {
       </ChartContainer>
 
       <p className="font-semibold">
-        {t("yourscore2")}: {score2.tableValue}%
+        {t("yourscore2")}: {score2.tableValue} %
       </p>
     </div>
   );

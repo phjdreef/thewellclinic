@@ -90,6 +90,9 @@ export const GgrChartComponent = () => {
           )}
         </BarChart>
       </ChartContainer>
+      <p className="font-semibold">
+        {t("yourGGR")}: {t(ggr)}
+      </p>
     </div>
   );
 };

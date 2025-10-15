@@ -68,6 +68,9 @@ export const WaistChartComponent = () => {
           <ReferenceLine x={waist} strokeWidth={8} stroke="#106da6" />
         </BarChart>
       </ChartContainer>
+      <p className="font-semibold">
+        {t("yourWaist")}: {waist} cm
+      </p>
     </div>
   );
 };

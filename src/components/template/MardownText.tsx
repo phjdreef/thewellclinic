@@ -21,19 +21,23 @@ export function Markdowntext({
 
   useEffect(() => {
     const fetchMarkdown = async () => {
-      const filePath = `resources/text/${component}-${beforeAfter}.md`;
-      const response = await fetch(filePath);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      } else {
-        const text = await response.text();
+      try {
+        const filePath = `resources/text/${component}-${beforeAfter}.md`;
+        const text = await window.fileAPI.readFile(filePath);
         if (!isHTML(text)) {
           setMarkdownContent(text);
         }
+      } catch (error) {
+        console.error(
+          `Error loading markdown file for ${component}-${beforeAfter}:`,
+          error,
+        );
+        // Set a fallback content or leave empty
+        setMarkdownContent(undefined);
       }
     };
     fetchMarkdown();
-  }, []);
+  }, [component, beforeAfter]);
 
   return (
     <>

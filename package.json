@@ -1,7 +1,7 @@
 {
   "name": "well-clinic-app",
   "productName": "WellClinic Health Analysis",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A comprehensive 360° health analysis application for cardiovascular risk, diabetes assessment, BMI analysis, and weight-related health insights.",
   "main": ".vite/build/main.js",
   "private": true,

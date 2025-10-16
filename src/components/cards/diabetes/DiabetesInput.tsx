@@ -2,12 +2,12 @@
 
 import { DiabetesChartComponent } from "@/components/charts/DiabetesChart";
 import { DiabetesConfig } from "@/components/measures/calcDiabetes";
+import { calcDiabetesRisk } from "@/components/measures/calcDiabetesRisk";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { FieldCheckLabel } from "@/components/ui/custom/fieldCheckLabel";
 import { FieldNumberLabel } from "@/components/ui/custom/fieldNumberLabel";
 import { round } from "@/helpers/number_helpers";
-import { DiabetesFormState, Gender, useStore } from "@/hooks/useStore";
+import { DiabetesFormState, useStore } from "@/hooks/useStore";
 import { JSX, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -22,19 +22,6 @@ const initialState: DiabetesFormState = {
 };
 
 // -------------------- HELPERS -------------------- //
-const clampNumber = (n: number | undefined) =>
-  Number.isFinite(n as number) ? (n as number) : undefined;
-
-function pointsForRange(
-  value: number | undefined,
-  ranges: { min: number; max: number; pts: number }[],
-) {
-  if (value === undefined) return 0;
-  for (const r of ranges) {
-    if (value >= r.min && value < r.max) return r.pts;
-  }
-  return 0;
-}
 
 function DiabetesInput(): JSX.Element {
   const { t } = useTranslation();
@@ -88,114 +75,30 @@ function DiabetesInput(): JSX.Element {
     }));
   }, [height, waist, gender, age]);
 
-  const pts = useMemo(() => {
-    let total = 0;
-    const detail: Record<string, number> = {};
+  const diabetesResult = useMemo(() => {
+    const result = calcDiabetesRisk({
+      sex: form.sex,
+      age: age,
+      waistCm: form.waistCm,
+      heightCm: form.heightCm,
+      pulse: form.pulse,
+      glucoseMmol: form.glucoseMmol,
+      trigMmol: form.trigMmol,
+      hdlMmol: form.hdlMmol,
+      uricUmol: form.uricUmol,
+      diabeticMother: form.diabeticMother,
+      diabeticFather: form.diabeticFather,
+      hypertension: form.hypertension,
+      blackRace: form.blackRace,
+      neverOrFormerDrinker: form.neverOrFormerDrinker,
+    });
 
-    // Base yes/no factors
-    const { base } = DiabetesConfig;
-    if (form.diabeticMother) {
-      total += base.diabeticMother;
-      detail["Diabetic mother"] = base.diabeticMother;
-    }
-    if (form.diabeticFather) {
-      total += base.diabeticFather;
-      detail["Diabetic father"] = base.diabeticFather;
-    }
-    if (form.hypertension) {
-      total += base.hypertension;
-      detail["Hypertension"] = base.hypertension;
-    }
-    if (form.blackRace) {
-      total += base.blackRace;
-      detail["Black race"] = base.blackRace;
-    }
-    if (form.age55to64) {
-      total += base.age55to64;
-      detail["Age 55–64 y"] = base.age55to64;
-    }
-    if (form.neverOrFormerDrinker) {
-      total += base.neverOrFormerDrinker;
-      detail["Never/former drinker"] = base.neverOrFormerDrinker;
-    }
+    setDiabetesPoints(result.totalPoints);
+    setDiabetesRisc(result.risk);
+    return result;
+  }, [form, age, setDiabetesPoints, setDiabetesRisc]);
 
-    // Waist circumference (sex specific)
-    const w = clampNumber(form.waistCm);
-    const waistPts = pointsForRange(w, DiabetesConfig.waist[form.sex]);
-    if (waistPts) {
-      total += waistPts;
-      detail["Waist circumference"] = waistPts;
-    }
-
-    // Height (shortness) — points if below threshold
-    const h = clampNumber(form.heightCm);
-    if (h !== undefined) {
-      const shortThreshold = DiabetesConfig.heightShort[form.sex];
-      if (h < shortThreshold) {
-        total += DiabetesConfig.heightShort.pts;
-        detail["Height (<threshold)"] = DiabetesConfig.heightShort.pts;
-      }
-    }
-
-    // Resting pulse — points if >= threshold
-    const p = clampNumber(form.pulse);
-    if (p !== undefined) {
-      const pulseThr = DiabetesConfig.pulseHigh[form.sex];
-      if (p >= pulseThr) {
-        total += DiabetesConfig.pulseHigh.pts;
-        detail["Resting pulse (high)"] = DiabetesConfig.pulseHigh.pts;
-      }
-    }
-
-    // Fasting glucose
-    const g = clampNumber(form.glucoseMmol);
-    const gPts = pointsForRange(g, DiabetesConfig.glucose);
-    if (gPts) {
-      total += gPts;
-      detail["Glucose"] = gPts;
-    }
-
-    // Triglycerides (sex specific)
-    const t = clampNumber(form.trigMmol);
-    const tPts = pointsForRange(t, DiabetesConfig.triglycerides[form.sex]);
-    if (tPts) {
-      total += tPts;
-      detail["Triglycerides"] = tPts;
-    }
-
-    // HDL — low threshold
-    const hdl = clampNumber(form.hdlMmol);
-    if (hdl !== undefined) {
-      const hdlThr = DiabetesConfig.hdlLow[form.sex];
-      if (hdl < hdlThr) {
-        total += DiabetesConfig.hdlLow.pts;
-        detail["HDL (low)"] = DiabetesConfig.hdlLow.pts;
-      }
-    }
-
-    // Uric acid — high threshold
-    const ua = clampNumber(form.uricUmol);
-    if (ua !== undefined) {
-      const uaThr = DiabetesConfig.uricAcidHigh[form.sex];
-      if (ua >= uaThr) {
-        total += DiabetesConfig.uricAcidHigh.pts;
-        detail["Uric acid (high)"] = DiabetesConfig.uricAcidHigh.pts;
-      }
-    }
-
-    const band =
-      DiabetesConfig.riskBands.find((b) => total >= b.min && total < b.max) ??
-      DiabetesConfig.riskBands[DiabetesConfig.riskBands.length - 1];
-    const risk = band.risk;
-    setDiabetesPoints(total);
-    setDiabetesRisc(risk);
-    return { total, detail };
-  }, [form]);
-
-  const percentOfMax = Math.min(
-    100,
-    Math.round((pts.total / DiabetesConfig.maxTotal) * 100),
-  );
+  const percentOfMax = diabetesResult.percentOfMax;
 
   return (
     <Card>
@@ -269,12 +172,12 @@ function DiabetesInput(): JSX.Element {
           </div>
 
           <div className="space-y-1">
-            {Object.entries(pts.detail).length === 0 ? (
+            {Object.entries(diabetesResult.detail).length === 0 ? (
               <p className="text-sm text-slate-500">
                 {t("noContributingFactors")}
               </p>
             ) : (
-              Object.entries(pts.detail).map(([k, v]) => (
+              Object.entries(diabetesResult.detail).map(([k, v]) => (
                 <div key={k} className="flex justify-between text-sm">
                   <span className="text-slate-600">
                     {translateDetailLabel(k)}

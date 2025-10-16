@@ -1,13 +1,12 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, session } from "electron";
 import registerListeners from "./helpers/ipc/listeners-register";
 // "electron-squirrel-startup" seems broken when packaging with vite
 //import started from "electron-squirrel-startup";
 import path from "path";
 import { fileURLToPath } from "url";
-import {
-  installExtension,
-  REACT_DEVELOPER_TOOLS,
-} from "electron-devtools-installer";
+// React Developer Tools disabled to prevent extension warnings and errors
+// If you need React DevTools, you can install it manually in Chrome/Edge
+// and use the remote debugging port: chrome://inspect
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,15 +40,20 @@ function createWindow() {
 }
 
 async function installExtensions() {
-  try {
-    const result = await installExtension(REACT_DEVELOPER_TOOLS);
-    console.log(`Extensions installed successfully: ${result.name}`);
-  } catch {
-    console.error("Failed to install extensions");
-  }
+  // Extensions completely disabled to prevent service worker and database errors
+  // React DevTools can still be used via Chrome DevTools or remote debugging
+  console.log("React DevTools: Use chrome://inspect for debugging");
 }
 
-app.whenReady().then(createWindow).then(installExtensions);
+app.whenReady().then(async () => {
+  // Suppress Electron deprecation warnings in development
+  if (inDevelopment) {
+    process.removeAllListeners("warning");
+  }
+
+  await createWindow();
+  await installExtensions();
+});
 
 //osX only
 app.on("window-all-closed", () => {

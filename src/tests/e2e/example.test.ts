@@ -6,6 +6,7 @@ import {
   Page,
 } from "@playwright/test";
 import { findLatestBuild, parseElectronApp } from "electron-playwright-helpers";
+import { getSelectorOptions, getWaitTime } from "./utils/testHelpers";
 
 /*
  * E2E tests for 360° Health Analysis app
@@ -43,8 +44,8 @@ test.beforeAll(async () => {
 // Helper function to ensure Dutch language is set
 async function ensureDutchLanguage(page: Page) {
   try {
-    // Wait for page to load
-    await page.waitForSelector("h1", { timeout: 5000 });
+    // Wait for page to load with CI-friendly timeout
+    await page.waitForSelector("h1", getSelectorOptions(5000));
 
     // Check if we can find language toggle
     const langToggle = page.locator('[data-testid="lang-toggle"]');

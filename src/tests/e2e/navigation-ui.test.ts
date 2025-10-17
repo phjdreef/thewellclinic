@@ -6,6 +6,7 @@ import {
   Page,
 } from "@playwright/test";
 import { findLatestBuild, parseElectronApp } from "electron-playwright-helpers";
+import { getSelectorOptions, getWaitTime } from "./utils/testHelpers";
 
 /*
  * E2E tests for Navigation and UI Components
@@ -25,7 +26,6 @@ test.beforeAll(async () => {
   });
 
   page = await electronApp.firstWindow();
-  
 });
 
 test.afterAll(async () => {
@@ -35,8 +35,8 @@ test.afterAll(async () => {
 // Helper function to ensure Dutch language is set
 async function ensureDutchLanguage(page: Page) {
   try {
-    // Wait for page to load
-    await page.waitForSelector("h1", { timeout: 5000 });
+    // Wait for page to load with CI-friendly timeout
+    await page.waitForSelector("h1", getSelectorOptions(5000));
 
     // Check if we can find language toggle
     const langToggle = page.locator('[data-testid="lang-toggle"]');
@@ -176,10 +176,16 @@ test.describe("Navigation and UI Components", () => {
 
     // Navigate to input page
     await page.click('[data-testid="nav-input"]');
-    await page.waitForSelector('[data-testid="input-page-title"]');
+    await page.waitForSelector(
+      '[data-testid="input-page-title"]',
+      getSelectorOptions(10000),
+    );
 
-    // Wait for the tabs to load
-    await page.waitForSelector('[data-testid="tab-basic"]', { timeout: 10000 });
+    // Wait for the tabs to load with CI-friendly timeout
+    await page.waitForSelector(
+      '[data-testid="tab-basic"]',
+      getSelectorOptions(15000),
+    );
 
     // Debug: Check what elements are present after tabs load
     const allTestIds = await page.$$eval("[data-testid]", (elements) =>

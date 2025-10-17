@@ -6,6 +6,7 @@ import {
   Page,
 } from "@playwright/test";
 import { findLatestBuild, parseElectronApp } from "electron-playwright-helpers";
+import { getSelectorOptions, getWaitTime } from "./utils/testHelpers";
 
 /*
  * E2E tests for Data Persistence and State Management
@@ -34,13 +35,13 @@ test.afterAll(async () => {
 // Helper function to ensure Dutch language is set
 async function ensureDutchLanguage(page: Page) {
   try {
-    // Wait for page to load
-    await page.waitForSelector("h1", { timeout: 5000 });
+    // Wait for page to load with CI-friendly timeout
+    await page.waitForSelector("h1", getSelectorOptions(5000));
 
-    // Check if we can find language toggle
+    // Check if we can find language toggle with extended timeout
     const langToggle = page.locator('[data-testid="lang-toggle"]');
     const isVisible = await langToggle
-      .isVisible({ timeout: 3000 })
+      .isVisible(getSelectorOptions(3000))
       .catch(() => false);
 
     if (isVisible) {
@@ -60,7 +61,7 @@ async function ensureDutchLanguage(page: Page) {
           const buttonText = await langButtons.nth(i).textContent();
           if (buttonText?.includes("NL") || buttonText?.includes("nl")) {
             await langButtons.nth(i).click();
-            await page.waitForTimeout(500);
+            await page.waitForTimeout(getWaitTime(500));
             break;
           }
         }
@@ -91,7 +92,10 @@ test.describe("Data Persistence and State Management", () => {
 
     // Navigate to input and fill basic data
     await page.click('[data-testid="nav-input"]');
-    await page.waitForSelector('[data-testid="name-input"]');
+    await page.waitForSelector(
+      '[data-testid="name-input"]',
+      getSelectorOptions(10000),
+    );
 
     await page.fill('[data-testid="name-input"]', testData.name);
     await page.fill('[data-testid="age-input"]', testData.age);
@@ -126,7 +130,7 @@ test.describe("Data Persistence and State Management", () => {
 
     // Navigate to home page where theme toggle should be
     await page.click('[data-testid="nav-home"]');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(getWaitTime(500));
 
     // Set dark theme
     await page.click('[data-testid="theme-toggle"]');
@@ -135,12 +139,12 @@ test.describe("Data Persistence and State Management", () => {
 
     // Navigate to different pages and verify theme persists
     await page.click('[data-testid="nav-input"]');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(getWaitTime(500));
     let currentThemeClass = await body.getAttribute("class");
     expect(currentThemeClass).toBe(darkThemeClass);
 
     await page.click('[data-testid="nav-output"]');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(getWaitTime(500));
     currentThemeClass = await body.getAttribute("class");
     expect(currentThemeClass).toBe(darkThemeClass);
 

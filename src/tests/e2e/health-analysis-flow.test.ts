@@ -6,6 +6,7 @@ import {
   Page,
 } from "@playwright/test";
 import { findLatestBuild, parseElectronApp } from "electron-playwright-helpers";
+import { getSelectorOptions, getWaitTime } from "./utils/testHelpers";
 
 /*
  * E2E tests for Complete Health Analysis User Flow
@@ -50,13 +51,13 @@ test.afterAll(async () => {
 // Helper function to ensure Dutch language is set
 async function ensureDutchLanguage(page: Page) {
   try {
-    // Wait for page to load
-    await page.waitForSelector("h1", { timeout: 5000 });
+    // Wait for page to load with CI-friendly timeout
+    await page.waitForSelector("h1", getSelectorOptions(5000));
 
-    // Check if we can find language toggle
+    // Check if we can find language toggle with extended timeout
     const langToggle = page.locator('[data-testid="lang-toggle"]');
     const isVisible = await langToggle
-      .isVisible({ timeout: 3000 })
+      .isVisible(getSelectorOptions(3000))
       .catch(() => false);
 
     if (isVisible) {
@@ -76,7 +77,7 @@ async function ensureDutchLanguage(page: Page) {
           const buttonText = await langButtons.nth(i).textContent();
           if (buttonText?.includes("NL") || buttonText?.includes("nl")) {
             await langButtons.nth(i).click();
-            await page.waitForTimeout(500);
+            await page.waitForTimeout(getWaitTime(500));
             break;
           }
         }
@@ -100,7 +101,10 @@ test.describe("Complete Health Analysis Workflow", () => {
 
     // 2. Navigate to input page
     await page.click('[data-testid="nav-input"]');
-    await page.waitForSelector('[data-testid="input-page-title"]');
+    await page.waitForSelector(
+      '[data-testid="input-page-title"]',
+      getSelectorOptions(10000),
+    );
 
     // 3. Fill basic information
     await page.fill('[data-testid="name-input"]', "John Doe");
@@ -113,8 +117,11 @@ test.describe("Complete Health Analysis Workflow", () => {
     await page.fill('[data-testid="weight-input"]', "80");
     await page.fill('[data-testid="height-input"]', "180");
 
-    // Wait for BMI calculation to complete
-    await page.waitForSelector('[data-testid="bmi-result"]', { timeout: 5000 });
+    // Wait for BMI calculation to complete with CI-friendly timeout
+    await page.waitForSelector(
+      '[data-testid="bmi-result"]',
+      getSelectorOptions(5000),
+    );
     const bmiValue = await page.textContent('[data-testid="bmi-result"]');
     console.log("BMI calculated:", bmiValue);
     await page.fill('[data-testid="waist-input"]', "90");
@@ -133,15 +140,19 @@ test.describe("Complete Health Analysis Workflow", () => {
 
     // 7. Navigate to results
     await page.click('[data-testid="nav-output"]');
-    await page.waitForSelector('[data-testid="overall-results"]');
+    await page.waitForSelector(
+      '[data-testid="overall-results"]',
+      getSelectorOptions(10000),
+    );
 
     // 8. Wait for charts to load with extended timeout for CI
     console.log("Waiting for charts to load...");
 
     try {
-      await page.waitForSelector('[data-testid="bmi-chart"]', {
-        timeout: 10000,
-      });
+      await page.waitForSelector(
+        '[data-testid="bmi-chart"]',
+        getSelectorOptions(15000),
+      );
       console.log("BMI chart loaded");
     } catch (error) {
       console.log("BMI chart failed to load:", error);
@@ -150,15 +161,18 @@ test.describe("Complete Health Analysis Workflow", () => {
       throw error;
     }
 
-    await page.waitForSelector('[data-testid="score2-chart"]', {
-      timeout: 10000,
-    });
-    await page.waitForSelector('[data-testid="diabetes-chart"]', {
-      timeout: 10000,
-    });
-    await page.waitForSelector('[data-testid="biological-age-chart"]', {
-      timeout: 10000,
-    });
+    await page.waitForSelector(
+      '[data-testid="score2-chart"]',
+      getSelectorOptions(10000),
+    );
+    await page.waitForSelector(
+      '[data-testid="diabetes-chart"]',
+      getSelectorOptions(10000),
+    );
+    await page.waitForSelector(
+      '[data-testid="biological-age-chart"]',
+      getSelectorOptions(10000),
+    );
 
     // Verify all charts are visible
     expect(await page.isVisible('[data-testid="bmi-chart"]')).toBeTruthy();

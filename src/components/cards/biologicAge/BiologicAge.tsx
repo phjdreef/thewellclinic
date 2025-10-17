@@ -9,7 +9,7 @@ export function BiologicalAge(): JSX.Element {
   const { t } = useTranslation();
   const { biologicAge, setBiologicAge } = useStore();
   return (
-    <Card>
+    <Card data-testid="biologic-age-input-card">
       <CardHeader>
         <CardTitle>{t("tabBiologicAge")}</CardTitle>
       </CardHeader>

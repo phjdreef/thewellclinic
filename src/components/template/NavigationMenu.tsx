@@ -14,17 +14,29 @@ export default function NavigationMenu() {
     <NavigationMenuBase className="text-muted-foreground px-2">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <Link to="/" className={navigationMenuTriggerStyle()}>
+          <Link
+            to="/"
+            className={navigationMenuTriggerStyle()}
+            data-testid="nav-home"
+          >
             {t("titleHomePage")}
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link to="/input" className={navigationMenuTriggerStyle()}>
+          <Link
+            to="/input"
+            className={navigationMenuTriggerStyle()}
+            data-testid="nav-input"
+          >
             {t("titleInputPage")}
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link to="/output" className={navigationMenuTriggerStyle()}>
+          <Link
+            to="/output"
+            className={navigationMenuTriggerStyle()}
+            data-testid="nav-output"
+          >
             {t("titleOutputPage")}
           </Link>
         </NavigationMenuItem>

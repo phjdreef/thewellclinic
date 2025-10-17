@@ -15,6 +15,7 @@ function FieldCheckLabel({
     <label className="flex items-center gap-2">
       <Checkbox
         id={id}
+        data-testid={`${id}-checkbox`}
         checked={checked ?? false}
         onCheckedChange={(e) => {
           onCheckedChange(e === true);

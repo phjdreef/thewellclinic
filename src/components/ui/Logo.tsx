@@ -6,6 +6,7 @@ interface LogoProps {
   width?: number;
   height?: number;
   alt?: string;
+  "data-testid"?: string;
 }
 
 export function Logo({
@@ -13,9 +14,13 @@ export function Logo({
   width = 200,
   height = 80,
   alt = "Well Clinic Logo",
+  "data-testid": dataTestId,
 }: LogoProps): JSX.Element {
   return (
-    <div className={`flex justify-center ${className}`}>
+    <div
+      className={`flex justify-center ${className}`}
+      data-testid={dataTestId}
+    >
       <img
         src={logoImage}
         alt={alt}

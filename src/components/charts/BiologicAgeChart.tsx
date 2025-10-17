@@ -43,6 +43,7 @@ export const BiologicAgeChartComponent = () => {
           <div className="text-center">
             <div
               className={`w-[180px] rounded-lg ${colors.chronological} p-6 text-white`}
+              data-testid="chronological-age-display"
             >
               <div className="text-3xl font-bold">{age}</div>
             </div>
@@ -55,6 +56,7 @@ export const BiologicAgeChartComponent = () => {
           <div className="text-center">
             <div
               className={`w-[180px] rounded-lg ${colors.biological} p-6 text-white`}
+              data-testid="biological-age-display"
             >
               <div className="text-3xl font-bold">{biologicAge}</div>
             </div>

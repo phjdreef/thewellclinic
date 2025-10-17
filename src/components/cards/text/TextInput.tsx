@@ -28,7 +28,7 @@ export function TextInput({ element }: Props): JSX.Element {
   };
 
   return (
-    <Card>
+    <Card data-testid="text-input-card">
       <CardHeader>
         <CardTitle>{t(element)}</CardTitle>
       </CardHeader>

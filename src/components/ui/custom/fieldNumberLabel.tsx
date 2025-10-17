@@ -22,6 +22,7 @@ function FieldNumberLabel({
       <span className="text-sm font-medium">{label}</span>
       <Input
         id={id}
+        data-testid={`${id}-input`}
         type="number"
         inputMode="decimal"
         step={step || "1"}

@@ -20,6 +20,7 @@ function FieldStringLabel({
       <span className="text-sm font-medium">{label}</span>
       <Input
         id={id}
+        data-testid={`${id}-input`}
         type="text"
         className="rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:ring-2 focus:ring-slate-300 focus:outline-none"
         style={{ width: width || "10rem" }}

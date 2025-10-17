@@ -98,7 +98,7 @@ export const BMIChartComponent = () => {
 
       {bmi && bmi > 0 && (
         <div className="mt-4 mb-4">
-          <span className="font-semibold">
+          <span className="font-semibold" data-testid="bmi-result">
             {t("yourBMI")}: {bmi}
           </span>
 
@@ -107,7 +107,7 @@ export const BMIChartComponent = () => {
           </span>
 
           {bmiCategory && (
-            <p className="font-semibold">
+            <p className="font-semibold" data-testid="bmi-category">
               {t("category")}: {t(bmiCategory)}
             </p>
           )}

@@ -17,6 +17,7 @@ export default function LangToggle() {
       type="single"
       onValueChange={onValueChange}
       value={currentLang}
+      data-testid="lang-toggle"
     >
       {langs.map((lang) => (
         <ToggleGroupItem

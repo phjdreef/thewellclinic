@@ -71,21 +71,36 @@ export function OverallResult(): JSX.Element {
   return (
     <>
       <div className="mb-4 flex justify-end">
-        <Button onClick={reactToPrintFn}>Print</Button>
+        <Button onClick={reactToPrintFn} data-testid="print-button">
+          Print
+        </Button>
       </div>
 
-      <div id="overall-result" ref={contentRef} className="p-4 pt-8">
-        <Logo className="logo-print mb-6" width={250} height={100} />
-        <h1 className="mb-10 text-center text-4xl font-bold">
+      <div
+        id="overall-result"
+        data-testid="overall-results"
+        ref={contentRef}
+        className="p-4 pt-8"
+      >
+        <Logo
+          className="logo-print mb-6"
+          width={250}
+          height={100}
+          data-testid="well-clinic-logo"
+        />
+        <h1
+          className="mb-10 text-center text-4xl font-bold"
+          data-testid="overall-result-header"
+        >
           {t("overall_result_header")}
         </h1>
         {name && name.length > 0 && (
-          <p>
+          <p data-testid="patient-name">
             {t("name")}: <span className="font-semibold">{name}</span>
           </p>
         )}
         {age && age > 0 && (
-          <p>
+          <p data-testid="patient-age">
             {t("age")}:{" "}
             <span className="font-semibold">
               {age} {t("year")}
@@ -93,7 +108,7 @@ export function OverallResult(): JSX.Element {
           </p>
         )}
         {gender && gender.length > 0 && (
-          <p>
+          <p data-testid="patient-gender">
             {t("gender")}: <span className="font-bold">{t(gender)}</span>
           </p>
         )}
@@ -110,7 +125,10 @@ export function OverallResult(): JSX.Element {
         />
         {/* bmi */}
         {!!bmi && height && bmi > 0 && (
-          <div className="print-preserve-colors mt-10 space-y-4">
+          <div
+            className="print-preserve-colors mt-10 space-y-4"
+            data-testid="bmi-chart bmi-section"
+          >
             <p className="font-bold">{t("bmi_result_header")}</p>
             <Markdowntext component="bmi" beforeAfter="before" />
             <BMIChartComponent />
@@ -143,7 +161,10 @@ export function OverallResult(): JSX.Element {
         {/* Biological Age */}
         {!!biologicAge && (
           <>
-            <div className="print-preserve-colors mt-10 space-y-4">
+            <div
+              className="print-preserve-colors mt-10 space-y-4"
+              data-testid="biological-age-chart biological-age-box"
+            >
               <p className="font-bold">{t("biologicAge_result_header")}</p>
               <Markdowntext component="biologicage" beforeAfter="before" />
               <BiologicAgeChartComponent />
@@ -155,24 +176,34 @@ export function OverallResult(): JSX.Element {
         {/* score2 */}
         {!!score2 && (
           <>
-            <div className="print-preserve-colors mt-10 space-y-4">
-              <p className="font-bold">{t("score2_result_header")}</p>
-              <Markdowntext component="score2" beforeAfter="before" />
-              <Score2ChartComponent />
-              <TextAreaResult content={texts.score2_result_header} />
-              <Markdowntext component="score2" beforeAfter="after" />
+            <div
+              className="print-preserve-colors mt-10 space-y-4"
+              data-testid="score2-result score2-section"
+            >
+              <div data-testid="score2-chart">
+                <p className="font-bold">{t("score2_result_header")}</p>
+                <Markdowntext component="score2" beforeAfter="before" />
+                <Score2ChartComponent />
+                <TextAreaResult content={texts.score2_result_header} />
+                <Markdowntext component="score2" beforeAfter="after" />
+              </div>
             </div>
           </>
         )}
         {/* Diabetes */}
         {!!diabetes && (
           <>
-            <div className="print-preserve-colors mt-10 space-y-4">
-              <p className="font-bold">{t("diabetes_result_header")}</p>
-              <Markdowntext component="diabetes" beforeAfter="before" />
-              <DiabetesChartComponent />
-              <TextAreaResult content={texts.diabetes_result_header} />
-              <Markdowntext component="diabetes" beforeAfter="after" />
+            <div
+              className="print-preserve-colors mt-10 space-y-4"
+              data-testid="diabetes-result"
+            >
+              <div data-testid="diabetes-chart">
+                <p className="font-bold">{t("diabetes_result_header")}</p>
+                <Markdowntext component="diabetes" beforeAfter="before" />
+                <DiabetesChartComponent />
+                <TextAreaResult content={texts.diabetes_result_header} />
+                <Markdowntext component="diabetes" beforeAfter="after" />
+              </div>
             </div>
           </>
         )}

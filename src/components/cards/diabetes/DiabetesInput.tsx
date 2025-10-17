@@ -101,7 +101,7 @@ function DiabetesInput(): JSX.Element {
   const percentOfMax = diabetesResult.percentOfMax;
 
   return (
-    <Card>
+    <Card data-testid="diabetes-input-card">
       <CardHeader>
         <CardTitle>{t("diabetes")}</CardTitle>
       </CardHeader>

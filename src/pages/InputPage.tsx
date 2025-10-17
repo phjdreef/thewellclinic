@@ -13,42 +13,71 @@ export default function Input() {
 
   return (
     <div className="h-full">
-      <h1 className="mb-2 text-center text-4xl font-bold">
+      <h1
+        className="mb-2 text-center text-4xl font-bold"
+        data-testid="input-page-title"
+      >
         {t("titleInputPage")}
       </h1>
       <div>
         <Tabs defaultValue="basic">
           <TabsList>
-            <TabsTrigger value="basic">{t("tabBasic")}</TabsTrigger>
-            <TabsTrigger value="measures">{t("tabMeasures")}</TabsTrigger>
-            <TabsTrigger value="biologicAge">{t("tabBiologicAge")}</TabsTrigger>
-            <TabsTrigger value="diabetes">{t("tabDiabetes")}</TabsTrigger>
-            <TabsTrigger value="additionalTexts">
+            <TabsTrigger value="basic" data-testid="tab-basic">
+              {t("tabBasic")}
+            </TabsTrigger>
+            <TabsTrigger value="measures" data-testid="tab-measures">
+              {t("tabMeasures")}
+            </TabsTrigger>
+            <TabsTrigger value="biologicAge" data-testid="tab-biologic-age">
+              {t("tabBiologicAge")}
+            </TabsTrigger>
+            <TabsTrigger value="diabetes" data-testid="tab-diabetes">
+              {t("tabDiabetes")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="additionalTexts"
+              data-testid="tab-additional-texts"
+            >
               {t("tabAdditionalTexts")}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="basic">
-            <div className="mx-auto w-full max-w-4xl space-y-4">
+            <div
+              className="mx-auto w-full max-w-4xl space-y-4"
+              data-testid="basic-input-card"
+            >
               <BasicInput />
             </div>
           </TabsContent>
           <TabsContent value="measures">
-            <div className="mx-auto w-full max-w-4xl space-y-4">
+            <div
+              className="mx-auto w-full max-w-4xl space-y-4"
+              data-testid="measures-input-card"
+            >
               <MeasureInput />
             </div>
           </TabsContent>
           <TabsContent value="biologicAge">
-            <div className="mx-auto w-full max-w-4xl space-y-4">
+            <div
+              className="mx-auto w-full max-w-4xl space-y-4"
+              data-testid="biological-age-input-card"
+            >
               <BiologicalAge />
             </div>
           </TabsContent>
           <TabsContent value="diabetes">
-            <div className="mx-auto w-full max-w-4xl space-y-4">
+            <div
+              className="mx-auto w-full max-w-4xl space-y-4"
+              data-testid="diabetes-input-card"
+            >
               <DiabetesInput />
             </div>
           </TabsContent>
           <TabsContent value="additionalTexts">
-            <div className="mx-auto w-full max-w-4xl space-y-4">
+            <div
+              className="mx-auto w-full max-w-4xl space-y-4"
+              data-testid="text-input-card"
+            >
               <TextInput element="overall_result_header" />
               <TextInput element="bmi_result_header" />
               <TextInput element="waist_result_header" />

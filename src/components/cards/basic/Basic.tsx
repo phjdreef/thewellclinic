@@ -27,7 +27,7 @@ export function BasicInput(): JSX.Element {
   const { t } = useTranslation();
 
   return (
-    <Card>
+    <Card data-testid="basic-input-card">
       <CardHeader>
         <CardTitle>{t("tabBasic")}</CardTitle>
       </CardHeader>
@@ -60,6 +60,7 @@ export function BasicInput(): JSX.Element {
                 checked={gender === "male"}
                 value="male"
                 id="r2"
+                data-testid="gender-male"
               />
               <Label htmlFor="r2">{t("male")}</Label>
             </div>
@@ -68,6 +69,7 @@ export function BasicInput(): JSX.Element {
                 checked={gender === "female"}
                 value="female"
                 id="r1"
+                data-testid="gender-female"
               />
               <Label htmlFor="r1">{t("female")}</Label>
             </div>

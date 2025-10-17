@@ -102,7 +102,7 @@ export function MeasureInput(): JSX.Element {
   ]);
 
   return (
-    <Card>
+    <Card data-testid="measures-input-card">
       <CardHeader>
         <CardTitle>{t("tabMeasures")}</CardTitle>
       </CardHeader>

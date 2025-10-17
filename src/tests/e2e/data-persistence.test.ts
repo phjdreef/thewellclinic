@@ -31,6 +31,47 @@ test.afterAll(async () => {
   await electronApp.close();
 });
 
+// Helper function to ensure Dutch language is set
+async function ensureDutchLanguage(page: Page) {
+  try {
+    // Wait for page to load
+    await page.waitForSelector("h1", { timeout: 5000 });
+
+    // Check if we can find language toggle
+    const langToggle = page.locator('[data-testid="lang-toggle"]');
+    const isVisible = await langToggle
+      .isVisible({ timeout: 3000 })
+      .catch(() => false);
+
+    if (isVisible) {
+      // Check current language by looking for Dutch text
+      const pageText = await page.textContent("body");
+
+      // If we don't see Dutch text, try to switch to Dutch
+      if (
+        !pageText?.includes("Gezondheidsanalyse") &&
+        !pageText?.includes("gezond")
+      ) {
+        const langButtons = langToggle.locator("button");
+        const buttonCount = await langButtons.count();
+
+        // Try to find and click the Dutch language button (NL)
+        for (let i = 0; i < buttonCount; i++) {
+          const buttonText = await langButtons.nth(i).textContent();
+          if (buttonText?.includes("NL") || buttonText?.includes("nl")) {
+            await langButtons.nth(i).click();
+            await page.waitForTimeout(500);
+            break;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    // Language toggle might not be available on all pages, which is fine
+    console.log("Language toggle not found or error occurred:", error);
+  }
+}
+
 test.describe("Data Persistence and State Management", () => {
   const testData = {
     name: "Test Patient",
@@ -45,6 +86,9 @@ test.describe("Data Persistence and State Management", () => {
   };
 
   test("should persist data when navigating between pages", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Navigate to input and fill basic data
     await page.click('[data-testid="nav-input"]');
     await page.waitForSelector('[data-testid="name-input"]');
@@ -77,6 +121,9 @@ test.describe("Data Persistence and State Management", () => {
   });
 
   test("should persist theme and language preferences", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Navigate to home page where theme toggle should be
     await page.click('[data-testid="nav-home"]');
     await page.waitForTimeout(500);
@@ -103,6 +150,9 @@ test.describe("Data Persistence and State Management", () => {
   });
 
   test("should maintain calculated values across navigation", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Fill complete health data
     await page.click('[data-testid="nav-input"]');
 
@@ -145,6 +195,9 @@ test.describe("Data Persistence and State Management", () => {
   });
 
   test("should handle data clearing/reset functionality", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Fill some data first
     await page.click('[data-testid="nav-input"]');
     await page.fill('[data-testid="name-input"]', "Test Clear");
@@ -164,6 +217,9 @@ test.describe("Data Persistence and State Management", () => {
   });
 
   test("should handle invalid data gracefully", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     await page.click('[data-testid="nav-input"]');
     await page.waitForSelector('[data-testid="input-page-title"]');
 

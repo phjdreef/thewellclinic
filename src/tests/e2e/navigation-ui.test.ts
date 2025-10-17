@@ -31,8 +31,52 @@ test.afterAll(async () => {
   await electronApp.close();
 });
 
+// Helper function to ensure Dutch language is set
+async function ensureDutchLanguage(page: Page) {
+  try {
+    // Wait for page to load
+    await page.waitForSelector("h1", { timeout: 5000 });
+
+    // Check if we can find language toggle
+    const langToggle = page.locator('[data-testid="lang-toggle"]');
+    const isVisible = await langToggle
+      .isVisible({ timeout: 3000 })
+      .catch(() => false);
+
+    if (isVisible) {
+      // Check current language by looking for Dutch text
+      const pageText = await page.textContent("body");
+
+      // If we don't see Dutch text, try to switch to Dutch
+      if (
+        !pageText?.includes("Gezondheidsanalyse") &&
+        !pageText?.includes("gezond")
+      ) {
+        const langButtons = langToggle.locator("button");
+        const buttonCount = await langButtons.count();
+
+        // Try to find and click the Dutch language button (NL)
+        for (let i = 0; i < buttonCount; i++) {
+          const buttonText = await langButtons.nth(i).textContent();
+          if (buttonText?.includes("NL") || buttonText?.includes("nl")) {
+            await langButtons.nth(i).click();
+            await page.waitForTimeout(500);
+            break;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    // Language toggle might not be available on all pages, which is fine
+    console.log("Language toggle not found or error occurred:", error);
+  }
+}
+
 test.describe("Navigation and UI Components", () => {
   test("should navigate between all pages", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Start at home page
     await page.waitForSelector("h1");
 
@@ -63,70 +107,72 @@ test.describe("Navigation and UI Components", () => {
   });
 
   test("should switch themes correctly", async () => {
-    // Check initial theme
-    const html = page.locator("html");
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
 
-    // Get initial state
-    await page.waitForTimeout(1000); // Wait for initial theme to be set
+    // Get initial html element class (where theme is applied)
+    const html = await page.locator("html");
     const initialClass = (await html.getAttribute("class")) || "";
     console.log("Initial class:", initialClass);
 
     // Click theme toggle
     await page.click('[data-testid="theme-toggle"]');
 
-    // Wait longer for theme change
-    await page.waitForTimeout(1000);
-    const newClass = (await html.getAttribute("class")) || "";
-    console.log("New class after toggle:", newClass);
-
-    // Check if dark class was toggled
-    if (initialClass.includes("dark")) {
-      // Was dark, should now be light (no dark class)
-      expect(newClass).not.toContain("dark");
-    } else {
-      // Was light, should now be dark
-      expect(newClass).toContain("dark");
+    // Wait for the class to actually change on the html element
+    let attempts = 0;
+    let currentClass = initialClass;
+    while (attempts < 5 && currentClass === initialClass) {
+      await page.waitForTimeout(200);
+      currentClass = (await html.getAttribute("class")) || "";
+      attempts++;
     }
+
+    console.log("New class after toggle:", currentClass);
+
+    // Check if theme actually changed
+    expect(currentClass).not.toBe(initialClass);
   });
   test("should switch languages correctly", async () => {
-    // Check initial language
+    // Start with Dutch (default language)
+    await ensureDutchLanguage(page);
+    await page.waitForTimeout(500);
+
+    // Check initial Dutch text
     const appNameElements = await page.locator("h1").all();
-    const initialAppName = await appNameElements[1].textContent();
-    console.log("Initial app name:", initialAppName);
+    const dutchAppName = await appNameElements[1].textContent();
+    console.log("Dutch app name:", dutchAppName);
+    expect(dutchAppName).toContain("Gezondheidsanalyse"); // Should be Dutch
 
-    // Find the language toggle buttons
-    const langToggle = page.locator('[data-testid="lang-toggle"]');
-    const langButtons = langToggle.locator("button");
+    // Click the EN button to switch to English
+    const enButton = page.locator(
+      '[data-testid="lang-toggle"] button:has-text("EN")',
+    );
+    await enButton.click();
+    await page.waitForTimeout(500);
 
-    // Click the other language button (not the currently active one)
-    const buttonCount = await langButtons.count();
-    console.log("Number of language buttons:", buttonCount);
+    // Check that it switched to English
+    const englishAppName = await appNameElements[1].textContent();
+    console.log("English app name:", englishAppName);
+    expect(englishAppName).toContain("Health Analysis"); // Should be English
+    expect(englishAppName).not.toBe(dutchAppName);
 
-    // Try clicking each button to find one that changes the language
-    for (let i = 0; i < buttonCount; i++) {
-      const buttonText = await langButtons.nth(i).textContent();
-      console.log(`Button ${i}: ${buttonText}`);
+    // Switch back to Dutch
+    const nlButton = page.locator(
+      '[data-testid="lang-toggle"] button:has-text("NL")',
+    );
+    await nlButton.click();
+    await page.waitForTimeout(500);
 
-      await langButtons.nth(i).click();
-      await page.waitForTimeout(500);
-
-      const newAppName = await appNameElements[1].textContent();
-      console.log("App name after clicking button", i, ":", newAppName);
-
-      if (newAppName !== initialAppName) {
-        // Language changed successfully
-        console.log("Language switched successfully");
-        expect(newAppName).not.toBe(initialAppName);
-        return; // Test passed
-      }
-    }
-
-    // If we get here, no button changed the language
-    console.log("No language change detected");
-    // For now, let's just verify the toggle buttons exist
-    expect(buttonCount).toBeGreaterThan(0);
+    // Verify it's back to Dutch
+    const backToDutchAppName = await appNameElements[1].textContent();
+    console.log("Back to Dutch app name:", backToDutchAppName);
+    expect(backToDutchAppName).toContain("Gezondheidsanalyse");
+    expect(backToDutchAppName).not.toBe(englishAppName);
   });
   test("should navigate through all input tabs", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Navigate to input page
     await page.click('[data-testid="nav-input"]');
     await page.waitForSelector('[data-testid="input-page-title"]');

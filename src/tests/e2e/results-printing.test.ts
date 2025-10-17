@@ -31,8 +31,52 @@ test.afterAll(async () => {
   await electronApp.close();
 });
 
+// Helper function to ensure Dutch language is set
+async function ensureDutchLanguage(page: Page) {
+  try {
+    // Wait for page to load
+    await page.waitForSelector("h1", { timeout: 5000 });
+
+    // Check if we can find language toggle
+    const langToggle = page.locator('[data-testid="lang-toggle"]');
+    const isVisible = await langToggle
+      .isVisible({ timeout: 3000 })
+      .catch(() => false);
+
+    if (isVisible) {
+      // Check current language by looking for Dutch text
+      const pageText = await page.textContent("body");
+
+      // If we don't see Dutch text, try to switch to Dutch
+      if (
+        !pageText?.includes("Gezondheidsanalyse") &&
+        !pageText?.includes("gezond")
+      ) {
+        const langButtons = langToggle.locator("button");
+        const buttonCount = await langButtons.count();
+
+        // Try to find and click the Dutch language button (NL)
+        for (let i = 0; i < buttonCount; i++) {
+          const buttonText = await langButtons.nth(i).textContent();
+          if (buttonText?.includes("NL") || buttonText?.includes("nl")) {
+            await langButtons.nth(i).click();
+            await page.waitForTimeout(500);
+            break;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    // Language toggle might not be available on all pages, which is fine
+    console.log("Language toggle not found or error occurred:", error);
+  }
+}
+
 test.describe("Results Display and Printing", () => {
   test.beforeEach(async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Set up complete health profile before each test
     await page.click('[data-testid="nav-input"]');
     await page.waitForSelector('[data-testid="name-input"]');
@@ -220,6 +264,9 @@ test.describe("Results Display and Printing", () => {
   */
 
   test("should show appropriate warnings for high-risk values", async () => {
+    // Ensure Dutch language is set
+    await ensureDutchLanguage(page);
+
     // Navigate to input and set high-risk values
     await page.click('[data-testid="nav-input"]');
 

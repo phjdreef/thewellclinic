@@ -99,17 +99,6 @@ export function calcScore2Unified(input: Score2Input): Score2Result | null {
   const sbpIndex = getSbpIndex(sbp);
   const nonHdlIndex = getNonHdlIndex(nonHdl);
 
-  console.log(
-    "🚀 ~ calcScore2Unified ~ tableValue:",
-    sex,
-    age,
-    sbp,
-    nonHdl,
-    smoker,
-    { ageGroup },
-    { sbpIndex },
-    { nonHdlIndex },
-  );
   // Check if any of the values are out of range
   if (ageGroup === null || sbpIndex === null || nonHdlIndex === null) {
     return null; // Invalid input values

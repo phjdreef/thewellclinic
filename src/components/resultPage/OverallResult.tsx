@@ -14,6 +14,7 @@ import { GgrChartComponent } from "../charts/GGRChart";
 import { Score2ChartComponent } from "../charts/Score2Chart";
 import { DiabetesChartComponent } from "../charts/DiabetesChart";
 import { BiologicAgeChartComponent } from "../charts/BiologicAgeChart";
+import { Logo } from "../ui/Logo";
 
 export function OverallResult(): JSX.Element {
   const {
@@ -39,6 +40,30 @@ export function OverallResult(): JSX.Element {
       @page {
         margin: 10 10 10 10 !important;
       }
+      .logo-print,
+      .print-preserve-colors,
+      .print-preserve-colors * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      /* Preserve colors for all chart elements */
+      .bg-cyan-800,
+      .bg-red-900,
+      .bg-green-900,
+      .bg-slate-500,
+      .text-white,
+      .text-gray-700,
+      .text-black,
+      [class*="bg-"],
+      [class*="text-"] {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      /* Ensure chart containers preserve colors */
+      div[class*="bg-"] {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
     }`,
     contentRef,
   });
@@ -50,6 +75,7 @@ export function OverallResult(): JSX.Element {
       </div>
 
       <div id="overall-result" ref={contentRef} className="p-4 pt-8">
+        <Logo className="logo-print mb-6" width={250} height={100} />
         <h1 className="mb-10 text-center text-4xl font-bold">
           {t("overall_result_header")}
         </h1>
@@ -84,7 +110,7 @@ export function OverallResult(): JSX.Element {
         />
         {/* bmi */}
         {!!bmi && height && bmi > 0 && (
-          <div className="mt-10 space-y-4">
+          <div className="print-preserve-colors mt-10 space-y-4">
             <p className="font-bold">{t("bmi_result_header")}</p>
             <Markdowntext component="bmi" beforeAfter="before" />
             <BMIChartComponent />
@@ -94,7 +120,7 @@ export function OverallResult(): JSX.Element {
         )}
         {/* waist and hip */}
         {!!waist && waist > 0 && (
-          <div className="mt-10 space-y-4">
+          <div className="print-preserve-colors mt-10 space-y-4">
             <p className="font-bold">{t("waist_result_header")}</p>
             <Markdowntext component="waist" beforeAfter="before" />
             <WaistChartComponent />
@@ -105,7 +131,7 @@ export function OverallResult(): JSX.Element {
         {/* Weight-Related Health Risk (GGR) */}
         {!!ggr && (
           <>
-            <div className="mt-10 space-y-4">
+            <div className="print-preserve-colors mt-10 space-y-4">
               <p className="font-bold">{t("ggr_result_header")}</p>
               <Markdowntext component="ggr" beforeAfter="before" />
               <GgrChartComponent />
@@ -117,7 +143,7 @@ export function OverallResult(): JSX.Element {
         {/* Biological Age */}
         {!!biologicAge && (
           <>
-            <div className="mt-10 space-y-4">
+            <div className="print-preserve-colors mt-10 space-y-4">
               <p className="font-bold">{t("biologicAge_result_header")}</p>
               <Markdowntext component="biologicage" beforeAfter="before" />
               <BiologicAgeChartComponent />
@@ -129,7 +155,7 @@ export function OverallResult(): JSX.Element {
         {/* score2 */}
         {!!score2 && (
           <>
-            <div className="mt-10 space-y-4">
+            <div className="print-preserve-colors mt-10 space-y-4">
               <p className="font-bold">{t("score2_result_header")}</p>
               <Markdowntext component="score2" beforeAfter="before" />
               <Score2ChartComponent />
@@ -141,7 +167,7 @@ export function OverallResult(): JSX.Element {
         {/* Diabetes */}
         {!!diabetes && (
           <>
-            <div className="mt-10 space-y-4">
+            <div className="print-preserve-colors mt-10 space-y-4">
               <p className="font-bold">{t("diabetes_result_header")}</p>
               <Markdowntext component="diabetes" beforeAfter="before" />
               <DiabetesChartComponent />

@@ -144,13 +144,33 @@ export function MeasureInput(): JSX.Element {
           label={t("nonHdlCholesterol")}
         />
 
-        {!!waist && <hr />}
+        {!!waist && (
+          <>
+            <hr />
+            <h4>{t("waist_result_header")}</h4>
+          </>
+        )}
         <WaistChartComponent />
-        {!!bmi && <hr />}
+        {!!bmi && (
+          <>
+            {" "}
+            <hr /> <h4>{t("bmi_result_header")}</h4>
+          </>
+        )}
         <BMIChartComponent />
-        {!!ggr && <hr />}
+        {!!ggr && (
+          <>
+            <hr />
+            <h4>{t("ggr_result_header")}</h4>
+          </>
+        )}
         <GgrChartComponent />
-        {!!score2 && <hr />}
+        {!!score2 && (
+          <>
+            <hr />
+            <h4>{t("score2_result_header")}</h4>
+          </>
+        )}
         <Score2ChartComponent />
       </CardContent>
     </Card>

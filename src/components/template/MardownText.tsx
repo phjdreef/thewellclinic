@@ -28,10 +28,13 @@ export function Markdowntext({
           setMarkdownContent(text);
         }
       } catch (error) {
-        console.error(
-          `Error loading markdown file for ${component}-${beforeAfter}:`,
-          error,
-        );
+        // Only log the error if not in test mode
+        if (!(window as any).__PLAYWRIGHT_TEST__) {
+          console.error(
+            `Error loading markdown file for ${component}-${beforeAfter}:`,
+            error,
+          );
+        }
         // Set a fallback content or leave empty
         setMarkdownContent(undefined);
       }

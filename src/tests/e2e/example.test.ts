@@ -31,7 +31,11 @@ test.beforeAll(async () => {
       console.error(error);
     });
     page.on("console", (msg) => {
-      console.log(msg.text());
+      // Filter out markdown file loading errors to clean up test output
+      const text = msg.text();
+      if (!text.includes("Error loading markdown file")) {
+        console.log(text);
+      }
     });
   });
 });

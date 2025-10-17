@@ -25,6 +25,7 @@ test.beforeAll(async () => {
   });
 
   page = await electronApp.firstWindow();
+  
 });
 
 test.afterAll(async () => {

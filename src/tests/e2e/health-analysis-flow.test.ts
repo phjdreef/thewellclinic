@@ -32,7 +32,11 @@ test.beforeAll(async () => {
       console.error(error);
     });
     page.on("console", (msg) => {
-      console.log(msg.text());
+      // Filter out markdown file loading errors to clean up test output
+      const text = msg.text();
+      if (!text.includes("Error loading markdown file")) {
+        console.log(text);
+      }
     });
   });
 
@@ -108,6 +112,11 @@ test.describe("Complete Health Analysis Workflow", () => {
     await page.click('[data-testid="tab-measures"]');
     await page.fill('[data-testid="weight-input"]', "80");
     await page.fill('[data-testid="height-input"]', "180");
+
+    // Wait for BMI calculation to complete
+    await page.waitForSelector('[data-testid="bmi-result"]', { timeout: 5000 });
+    const bmiValue = await page.textContent('[data-testid="bmi-result"]');
+    console.log("BMI calculated:", bmiValue);
     await page.fill('[data-testid="waist-input"]', "90");
     await page.fill('[data-testid="systolic-input"]', "140");
     await page.fill('[data-testid="nonHdl-input"]', "4.5");
@@ -126,7 +135,32 @@ test.describe("Complete Health Analysis Workflow", () => {
     await page.click('[data-testid="nav-output"]');
     await page.waitForSelector('[data-testid="overall-results"]');
 
-    // 8. Verify results are displayed
+    // 8. Wait for charts to load with extended timeout for CI
+    console.log("Waiting for charts to load...");
+
+    try {
+      await page.waitForSelector('[data-testid="bmi-chart"]', {
+        timeout: 10000,
+      });
+      console.log("BMI chart loaded");
+    } catch (error) {
+      console.log("BMI chart failed to load:", error);
+      // Take a screenshot for debugging
+      await page.screenshot({ path: "debug-bmi-chart-missing.png" });
+      throw error;
+    }
+
+    await page.waitForSelector('[data-testid="score2-chart"]', {
+      timeout: 10000,
+    });
+    await page.waitForSelector('[data-testid="diabetes-chart"]', {
+      timeout: 10000,
+    });
+    await page.waitForSelector('[data-testid="biological-age-chart"]', {
+      timeout: 10000,
+    });
+
+    // Verify all charts are visible
     expect(await page.isVisible('[data-testid="bmi-chart"]')).toBeTruthy();
     expect(await page.isVisible('[data-testid="score2-chart"]')).toBeTruthy();
     expect(await page.isVisible('[data-testid="diabetes-chart"]')).toBeTruthy();

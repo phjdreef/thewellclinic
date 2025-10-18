@@ -36,6 +36,11 @@ jobs:
         run: npm ci
 
       - name: Build and package
+        if: matrix.platform == 'darwin'
+        run: npm run make:universal
+
+      - name: Build and package
+        if: matrix.platform == 'win32'
         run: npm run make
 
       - name: Upload macOS artifacts

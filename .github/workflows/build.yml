@@ -17,7 +17,12 @@ jobs:
         include:
           - os: macos-latest
             platform: darwin
-            artifact_name: macOS
+            arch: x64
+            artifact_name: macOS-Intel
+          - os: macos-latest
+            platform: darwin
+            arch: arm64
+            artifact_name: macOS-AppleSilicon
           - os: windows-latest
             platform: win32
             artifact_name: Windows
@@ -37,7 +42,7 @@ jobs:
 
       - name: Build and package
         if: matrix.platform == 'darwin'
-        run: npm run make:universal
+        run: npm run make:${{ matrix.arch }}
 
       - name: Build and package
         if: matrix.platform == 'win32'
